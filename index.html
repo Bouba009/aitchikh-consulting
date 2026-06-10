@@ -23,7 +23,7 @@
         body { font-family: 'Poppins', 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
         html[dir="rtl"] body { font-family: 'Cairo', sans-serif; }
 
-        /* --- شاشة التحميل (Preloader) --- */
+        /* --- شاشة تحميل الأعمال الاحترافية (Business Preloader) --- */
         #preloader {
             position: fixed;
             top: 0;
@@ -36,36 +36,71 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.4s ease, visibility 0.4s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
-        .preloader-text {
-            color: var(--primary);
-            font-size: 2.2em;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-            animation: pulseText 1s infinite alternate;
-            font-weight: bold;
-        }
-        .preloader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
+        .preloader-logo {
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(21, 94, 55, 0.12);
+            margin-bottom: 20px;
+            animation: pulseLogo 2s infinite ease-in-out;
+            border: 3px solid var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes pulseText { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 10px rgba(21, 94, 55, 0.2); } }
+        .preloader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .preloader-progress-container {
+            width: 160px;
+            height: 4px;
+            background: #e1e9e3;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .preloader-progress-bar {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            position: absolute;
+            left: -100%;
+            animation: loadingProgress 1.6s infinite ease-in-out;
+            border-radius: 10px;
+        }
+        .preloader-sub {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+        @keyframes pulseLogo {
+            0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(21, 94, 55, 0.12); }
+            50% { transform: scale(1.06); box-shadow: 0 15px 35px rgba(21, 94, 55, 0.25); }
+        }
+        @keyframes loadingProgress {
+            0% { left: -100%; }
+            50% { left: 0; }
+            100% { left: 100%; }
+        }
 
         #bg-animation { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; overflow: hidden; }
         .floating-icon { position: absolute; color: var(--primary); opacity: 0.08; animation: floatUp linear infinite; }
         @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-20vh) rotate(360deg); } }
 
-        header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo-container img { max-height: 65px; width: auto; transition: 0.3s; }
+        /* --- شريط علوي مصغر وأنيق --- */
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.03); padding: 5px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo-container img { max-height: 48px; width: auto; transition: 0.3s; }
         .nav-controls { display: flex; gap: 15px; align-items: center; }
         .lang-btn { background: var(--primary); color: var(--white); border: none; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; font-family: inherit; }
-        .menu-btn { font-size: 24px; color: var(--primary); cursor: pointer; }
+        .menu-btn { font-size: 22px; color: var(--primary); cursor: pointer; }
 
         #sidebar { position: fixed; top: 0; right: -300px; width: 250px; height: 100vh; background: var(--white); box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1000; padding: 20px; }
         html[dir="rtl"] #sidebar { right: auto; left: -300px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
@@ -144,13 +179,13 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(15, 33, 23, 0.65);
-            backdrop-filter: blur(8px);
+            background: rgba(15, 33, 23, 0.45);
+            backdrop-filter: blur(12px);
             z-index: 2000;
             align-items: center;
             justify-content: center;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .modal.active {
             display: flex;
@@ -159,15 +194,15 @@
         .modal-content {
             background: var(--white);
             padding: 35px;
-            border-radius: 20px;
+            border-radius: 24px;
             width: 90%;
-            max-width: 550px;
-            max-height: 90vh;
+            max-width: 520px;
+            max-height: 85vh;
             overflow-y: auto;
             position: relative;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
-            transform: translateY(-50px) scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 50px rgba(15, 33, 23, 0.2);
+            transform: translateY(40px) scale(0.95);
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
             color: var(--text);
         }
         .modal.active .modal-content {
@@ -175,25 +210,45 @@
         }
         .modal-close {
             position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--primary);
-            background: #eee;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            background: #f1f5f2;
             border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 16px;
+            border: 1px solid #e1e9e3;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            z-index: 10;
         }
-        html[dir="rtl"] .modal-close { right: auto; left: 15px; }
+        html[dir="rtl"] .modal-close { right: auto; left: 20px; }
         .modal-close:hover {
-            transform: rotate(90deg) scale(1.1);
-            background: #e74c3c;
-            color: white;
+            transform: scale(1.15) rotate(90deg);
+            background: var(--danger);
+            color: var(--white);
+            border-color: var(--danger);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+        .modal-close:active {
+            transform: scale(0.95) rotate(90deg);
+        }
+
+        /* لتجنب تكبير الصور داخل المقالات بشكل مبالغ فيه */
+        #blog-modal .modal-content img {
+            width: 100%;
+            max-width: 420px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 0 auto 20px;
+            display: block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
         }
 
         /* --- خانات الإدخال الاحترافية العائمة --- */
@@ -345,7 +400,7 @@
             box-shadow: 0 5px 15px rgba(21, 94, 55, 0.25);
         }
 
-        /* --- شريط الخدمات المتحرك --- */
+        /* --- شريط الخدمات المتحرك في اتجاهين متعاكسين دائمين --- */
         .services-section { padding: 30px 0; text-align: center; cursor: pointer; transition: 0.3s; }
         .services-section:hover { background-color: rgba(21, 94, 55, 0.02); }
         .services-hint { color: var(--primary); font-size: 0.9em; margin-bottom: 10px; opacity: 0.8; animation: bounce 2s infinite; }
@@ -355,10 +410,17 @@
         .marquee-track { display: flex; gap: 20px; width: max-content; margin-bottom: 10px; pointer-events: none;}
         .marquee-item { background: var(--primary); color: var(--white); padding: 12px 25px; border-radius: 30px; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 10px rgba(21, 94, 55, 0.15); font-size: 1em; border: 2px solid rgba(255,255,255,0.15);}
         
-        html[dir="ltr"] .marquee-track.row1 { animation: scrollLTR 40s linear infinite; }
-        html[dir="ltr"] .marquee-track.row2 { animation: scrollLTR_rev 45s linear infinite; }
-        html[dir="rtl"] .marquee-track.row1 { animation: scrollRTL 40s linear infinite; }
-        html[dir="rtl"] .marquee-track.row2 { animation: scrollRTL_rev 45s linear infinite; }
+        /* تأثيرات الحركة لليسار ولليمين دائمًا */
+        @keyframes scrollLTR {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes scrollRTL {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+        .marquee-track.row1 { animation: scrollLTR 35s linear infinite !important; }
+        .marquee-track.row2 { animation: scrollRTL 40s linear infinite !important; }
 
         /* --- سلايدر قسم الأعمال (أعمالنا) --- */
         section { padding: 40px 5%; }
@@ -512,10 +574,15 @@
 </head>
 <body>
 
-    <!-- شاشة التحميل -->
+    <!-- شاشة التحميل الاحترافية لبيئة الأعمال والشركات -->
     <div id="preloader">
-        <h1 class="preloader-text">Aitchikh Consulting</h1>
-        <div class="preloader-spinner"></div>
+        <div class="preloader-logo">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrVX1G4xzdkB-NE4L2PpO4spePos34o7PK6j83xhIxpb5UJYNW45wm9NSyIct_UIJysfydE9UXSkS2lC37qCVYYLyq3uRe8h190TC8tAv8LiTP2BHOVaxDgVJON9DeT9FDE-jGHwiNZzknr5F1CDbUsOgJrPD2EcOQVTRY_1Ko3bGQy5zAMbnhmamZKEk/s320/1000023962.jpg" alt="Aitchikh Consulting">
+        </div>
+        <div class="preloader-progress-container">
+            <div class="preloader-progress-bar"></div>
+        </div>
+        <p class="preloader-sub">AITCHIKH CONSULTING</p>
     </div>
 
     <div id="bg-animation"></div>
@@ -596,8 +663,8 @@
                 <div>
                     <h3 data-i18n="contactUs" style="color:var(--primary); margin-bottom:15px;">Contactez-nous</h3>
                     <p><i class="fas fa-envelope" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-email">consultingaitchikh@gmail.com</span></p>
-                    <p><i class="fas fa-phone" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-phone">+213 559 066 605</span></p>
-                    <p><i class="fas fa-map-marker-alt" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-loc">Cité Nouvelle Lycée, Rouïba, Alger</span></p>
+                    <p><i class="fas fa-phone" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-phone">+213 540 04 36 40</span></p>
+                    <p><i class="fas fa-map-marker-alt" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-loc">Rouïba, Alger</span></p>
                     <div class="social-links" style="margin-top:15px;">
                         <a href="#" id="f-fb" target="_blank"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" id="f-ig" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -607,7 +674,7 @@
             </div>
             <p class="copy">© 2026 Aitchikh Consulting. <a href="#" id="f-privacy" data-i18n="privacy">Politique de confidentialité</a></p>
         </footer>
-        <a href="https://wa.me/213559066605" class="fab-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://wa.me/213540043640" class="fab-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
     </div>
 
     <!-- استمارة التسجيل التفاعلية الاحترافية (Popup Modal) -->
@@ -816,20 +883,20 @@
 
         let currentLang = 'fr'; // الفرنسية هي اللغة الافتراضية
 
-        // إخفاء شاشة التحميل بعد ثانية واحدة
+        // إخفاء شاشة التحميل بعد ثانية ونصف لتأمين ظهور أنيميشن التحميل بشكل متناسق
         setTimeout(() => {
             const preloader = document.getElementById('preloader');
             if (preloader) {
                 preloader.style.opacity = '0';
                 preloader.style.visibility = 'hidden';
-                setTimeout(() => { preloader.style.display = 'none'; }, 400);
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
             }
-        }, 1000);
+        }, 1500);
         
         const translations = {
             fr: { 
                 menuJoin: "Rejoignez-nous", menuServices: "Nos Services", menuWorks: "Nos Réalisations", menuPartners: "Nos Partenaires", menuContact: "Contact", titleServices: "Nos Services", titleWorks: "Nos Réalisations", titlePartners: "Nos Partenaires", aboutUs: "Qui sommes-nous", contactUs: "Contactez-nous", privacy: "Politique de confidentialité", readMore: "Lire la suite", readLess: "Réduire", clickToView: "Cliquez pour voir tous les services", noServices: "Aucun service pour le moment", errorMsg: "Une erreur s'est produite : ", successSave: "Enregistré avec succès", successDel: "Élément supprimé", sureDel: "Êtes-vous sûr de vouloir supprimer ?", chooseImg: "Veuillez choisir une image", enterName: "Veuillez entrer le nom", wrongPwd: "Mot de passe incorrect",
-                adminLogin: "Connexion Admin", enterBtn: "Entrer", navDash: "Tableau de bord", navRegs: "Inscriptions", navServices: "Services", navWorks: "Réalisations", navPartners: "Partenaires", navSettings: "Paramètres", navLogout: "Quitter", dashTitle: "Statistiques du site", statToday: "Visites (Aujourd'hui)", statMonth: "Visites (Ce Mois)", statReg: "Inscriptions", btnNew: "Nouveau +", btnSave: "Enregistrer", archive: "Archive", lblSrvName: "Nom du service", lblImg: "Image", lblLogo: "Logo", lblContact: "Contact", lblSocial: "Réseaux Sociaux", lblMap: "Localisation (Code Iframe de Google Maps)", lblAbout: "À propos", btnUpdate: "Mettre à jour", btnLoading: "En cours...",
+                adminLogin: "Connexion Admin", enterBtn: "Entrer", navDash: "Dashboard", navRegs: "Inscriptions", navServices: "Services", navWorks: "Réalisations", navPartners: "Partenaires", navSettings: "Paramètres", navLogout: "Quitter", dashTitle: "Statistiques du site", statToday: "Visites (Aujourd'hui)", statMonth: "Visites (Ce Mois)", statReg: "Inscriptions", btnNew: "Nouveau +", btnSave: "Enregistrer", archive: "Archive", lblSrvName: "Nom du service", lblImg: "Image", lblLogo: "Logo", lblContact: "Contact", lblSocial: "Réseaux Sociaux", lblMap: "Localisation (Code Iframe de Google Maps)", lblAbout: "À propos", btnUpdate: "Mettre à jour", btnLoading: "En cours...",
                 heroTitle: "Aitchikh Consulting", heroSubtitle: "Votre partenaire de confiance pour l'accompagnement de vos projets, startups, et financement.", joinUsTitle: "Formulaire d'inscription", selectService: "Choisir un service", btnSubmit: "Envoyer la demande",
                 regList: "Liste des inscriptions", tblName: "Nom complet", tblPhone: "Téléphone", tblEmail: "Adresse Email", tblJob: "Profession", tblService: "Service", tblDate: "Date du demande",
                 lblFullName: "Nom complet", lblPhoneNo: "Numéro de téléphone", lblEmailAddr: "Adresse Email", lblJobTitle: "Profession / Métier"
@@ -849,8 +916,8 @@
             document.documentElement.lang = currentLang;
             document.getElementById('lang-toggle').innerText = currentLang === 'ar' ? 'Français' : 'عربي';
             
-            // تغيير ترويسة العنوان والخرائط للغة الحالية
-            document.getElementById('f-loc').innerText = currentLang === 'ar' ? 'حي الثانوية الجديدة، رويبة، الجزائر' : 'Cité Nouvelle Lycée, Rouïba, Alger';
+            // تغيير اسم موقع الخريطة للغة المحددة
+            document.getElementById('f-loc').innerText = currentLang === 'ar' ? 'رويبة، الجزائر' : 'Rouïba, Alger';
 
             document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = translations[currentLang][el.getAttribute('data-i18n')]; });
             
@@ -914,12 +981,12 @@
             });
         }
 
-        // البيانات الافتراضية
+        // البيانات الافتراضية المحدثة
         let siteData = { 
             banners: [], 
             settings: {
                 email: "consultingaitchikh@gmail.com",
-                phone: "+213 559 066 605",
+                phone: "+213 540 04 36 40",
                 fb: "https://facebook.com/aitchikh.consulting",
                 ig: "https://instagram.com/aitchikh.consulting",
                 about_fr: "Aitchikh Consulting est un cabinet de conseil de premier plan, dédié à l'accompagnement des porteurs de projets, au financement, et au soutien des startups pour atteindre leurs objectifs.",
@@ -963,7 +1030,7 @@
             registrations: []
         };
 
-        // إدارة فتح وإغلاق النافذة المنبثقة للاستمارة
+        // إدارة فتح وإغلاق النافذة المنبثقة للاستمارة بأسلوب ناعم
         window.openRegisterModal = function() {
             const modal = document.getElementById('register-modal');
             modal.style.display = 'flex';
@@ -1009,7 +1076,7 @@
             const cardWidth = track.querySelector('.card')?.offsetWidth || 300;
             const isRtl = document.documentElement.dir === 'rtl';
             const multiplier = isRtl ? -direction : direction;
-            const scrollAmount = (cardWidth + 25) * multiplier; // العرض مع المسافة الفاصلة
+            const scrollAmount = (cardWidth + 25) * multiplier;
             track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
         }
 
@@ -1112,7 +1179,7 @@
                 } else { aboutContainer.innerText = fullText; }
 
                 document.getElementById('f-email').innerText = s.email || 'consultingaitchikh@gmail.com'; 
-                document.getElementById('f-phone').innerText = s.phone || '+213 559 066 605';
+                document.getElementById('f-phone').innerText = s.phone || '+213 540 04 36 40';
                 document.getElementById('f-fb').href = s.fb || '#'; document.getElementById('f-ig').href = s.ig || '#';
                 
                 if(s.map) {
@@ -1188,7 +1255,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // تسجيل دخول لوحة التحكم (كلمة المرور المشفرة لـ aitchikh2026)
+        // تسجيل دخول لوحة التحكم لـ aitchikh2026
         window.checkAdmin = async function() {
             if(btoa(document.getElementById('admin-pwd').value) === "YWl0Y2hpa2gyMDI2") { 
                 document.getElementById('login-section').style.display = 'none'; 
