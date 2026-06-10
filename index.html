@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="fr" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,8 +20,8 @@
             --dark: #1b3d2b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
-        html[dir="ltr"] body { font-family: 'Poppins', 'Cairo', sans-serif; }
+        body { font-family: 'Poppins', 'Cairo', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        html[dir="rtl"] body { font-family: 'Cairo', sans-serif; }
 
         /* --- شاشة التحميل (Preloader) --- */
         #preloader {
@@ -68,94 +68,281 @@
         .menu-btn { font-size: 24px; color: var(--primary); cursor: pointer; }
 
         #sidebar { position: fixed; top: 0; right: -300px; width: 250px; height: 100vh; background: var(--white); box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1000; padding: 20px; }
-        html[dir="ltr"] #sidebar { right: auto; left: -300px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        html[dir="rtl"] #sidebar { right: auto; left: -300px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
         #sidebar.active { right: 0; }
-        html[dir="ltr"] #sidebar.active { left: 0; right: auto; }
+        html[dir="rtl"] #sidebar.active { left: 0; right: auto; }
         .close-btn { text-align: right; font-size: 24px; cursor: pointer; color: var(--primary); }
-        html[dir="ltr"] .close-btn { text-align: left; }
+        html[dir="rtl"] .close-btn { text-align: left; }
         #sidebar a { display: block; padding: 15px 0; color: var(--text); text-decoration: none; border-bottom: 1px solid #eee; font-weight: bold;}
 
-        /* --- البانر القصير المطور (استمارة الانضمام المدمجة) --- */
-        .hero-section {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            padding: 35px 40px;
+        /* --- البانر الاحترافي القصير وصورة مكتب الدراسات --- */
+        .hero-banner {
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=1600&h=700&q=80') no-repeat center center/cover;
             margin: 20px 5%;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(21, 94, 55, 0.15);
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 320px;
+            display: flex;
             align-items: center;
-        }
-        @media (max-width: 991px) {
-            .hero-section {
-                grid-template-columns: 1fr;
-                padding: 25px 20px;
-                text-align: center;
-            }
-        }
-        .hero-content h1 {
-            font-size: 2.2em;
-            margin-bottom: 15px;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-            font-weight: 700;
-        }
-        .hero-content p {
-            font-size: 1.1em;
-            line-height: 1.6;
-            opacity: 0.95;
-        }
-        .registration-card {
-            background: var(--white);
-            padding: 22px;
-            border-radius: 12px;
-            color: var(--text);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-        }
-        .registration-card h3 {
-            color: var(--primary);
-            margin-bottom: 15px;
+            justify-content: center;
             text-align: center;
-            font-size: 1.3em;
-            border-bottom: 2px solid var(--bg);
-            padding-bottom: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
-        .form-group-hero {
+        .hero-banner-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(21, 94, 55, 0.85), rgba(40, 143, 84, 0.75));
+            z-index: 1;
+        }
+        .hero-banner-content {
+            position: relative;
+            z-index: 2;
+            color: var(--white);
+            padding: 0 20px;
+            max-width: 800px;
+        }
+        .hero-banner-content h1 {
+            font-size: 2.8em;
             margin-bottom: 12px;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
-        .form-group-hero input, .form-group-hero select {
-            width: 100%;
-            padding: 11px 15px;
-            border: 1px solid #dbe3de;
-            border-radius: 8px;
+        .hero-banner-content p {
+            font-size: 1.15em;
+            margin-bottom: 25px;
+            opacity: 0.95;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .hero-cta-btn {
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+            padding: 14px 35px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-family: inherit;
-            font-size: 0.95em;
+        }
+        .hero-cta-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
             background: var(--bg);
-            transition: 0.3s;
+        }
+
+        /* --- النوافذ المنبثقة الاحترافية والأنيميشن --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(15, 33, 23, 0.65);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: var(--white);
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 550px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            transform: translateY(-50px) scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             color: var(--text);
         }
-        .form-group-hero input:focus, .form-group-hero select:focus {
-            border-color: var(--primary);
-            outline: none;
-            background: var(--white);
-            box-shadow: 0 0 5px rgba(21, 94, 55, 0.2);
+        .modal.active .modal-content {
+            transform: translateY(0) scale(1);
         }
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--primary);
+            background: #eee;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        html[dir="rtl"] .modal-close { right: auto; left: 15px; }
+        .modal-close:hover {
+            transform: rotate(90deg) scale(1.1);
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* --- خانات الإدخال الاحترافية العائمة --- */
+        .modal-form-group {
+            position: relative;
+            margin-bottom: 22px;
+        }
+        .modal-form-group input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e1e9e3;
+            border-radius: 12px;
+            background: var(--bg);
+            outline: none;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            color: var(--text);
+        }
+        .modal-form-group input:focus {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 10px rgba(21, 94, 55, 0.15);
+        }
+        .modal-form-group label {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            padding: 0 6px;
+            color: #7f8c8d;
+            transition: 0.3s ease;
+            pointer-events: none;
+            font-size: 0.95em;
+        }
+        html[dir="rtl"] .modal-form-group label {
+            left: auto;
+            right: 20px;
+        }
+        .modal-form-group input:focus ~ label,
+        .modal-form-group input:not(:placeholder-shown) ~ label {
+            top: 0;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--primary);
+            background: var(--white);
+        }
+
+        /* --- قائمة منسدلة احترافية وبأنيميشن مخصص --- */
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+        }
+        .dropdown-header {
+            background: var(--bg);
+            border: 2px solid #e1e9e3;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+        .dropdown-header:hover {
+            border-color: var(--primary-light);
+        }
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+            color: var(--primary);
+        }
+        .custom-dropdown.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        .custom-dropdown.open .dropdown-header {
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 10px rgba(21, 94, 55, 0.15);
+        }
+        .dropdown-list {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border: 1px solid #e1e9e3;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            z-index: 100;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 250px;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(-10px);
+            pointer-events: none;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .custom-dropdown.open .dropdown-list {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .dropdown-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: background 0.2s ease, color 0.2s ease;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f1f5f2;
+        }
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        .dropdown-item:hover {
+            background: var(--bg);
+            color: var(--primary);
+        }
+        .dropdown-item.selected {
+            background: rgba(21, 94, 55, 0.1);
+            color: var(--primary);
+            font-weight: bold;
+        }
+        html[dir="ltr"] .dropdown-item .lang-ar { display: none; }
+        html[dir="ltr"] .dropdown-item .lang-fr { display: block; }
+        html[dir="rtl"] .dropdown-item .lang-fr { display: none; }
+        html[dir="rtl"] .dropdown-item .lang-ar { display: block; }
+
         .hero-submit-btn {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             background: var(--primary);
             color: var(--white);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1.05em;
             transition: 0.3s;
             font-family: inherit;
         }
         .hero-submit-btn:hover {
             background: var(--primary-light);
+            box-shadow: 0 5px 15px rgba(21, 94, 55, 0.25);
         }
 
         /* --- شريط الخدمات المتحرك --- */
@@ -168,45 +355,83 @@
         .marquee-track { display: flex; gap: 20px; width: max-content; margin-bottom: 10px; pointer-events: none;}
         .marquee-item { background: var(--primary); color: var(--white); padding: 12px 25px; border-radius: 30px; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 10px rgba(21, 94, 55, 0.15); font-size: 1em; border: 2px solid rgba(255,255,255,0.15);}
         
-        @keyframes scrollLTR { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-        @keyframes scrollLTR_rev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-        @keyframes scrollRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
-        @keyframes scrollRTL_rev { 0% { transform: translateX(50%); } 100% { transform: translateX(0); } }
-
         html[dir="ltr"] .marquee-track.row1 { animation: scrollLTR 40s linear infinite; }
         html[dir="ltr"] .marquee-track.row2 { animation: scrollLTR_rev 45s linear infinite; }
         html[dir="rtl"] .marquee-track.row1 { animation: scrollRTL 40s linear infinite; }
         html[dir="rtl"] .marquee-track.row2 { animation: scrollRTL_rev 45s linear infinite; }
 
-        /* --- الأقسام الأخرى --- */
+        /* --- سلايدر قسم الأعمال (أعمالنا) --- */
         section { padding: 40px 5%; }
         .section-title { text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2em; position: relative; }
         .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 3px; background: var(--primary); border-radius: 5px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         
+        .slider-outer-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .slider-inner-track {
+            display: flex;
+            gap: 25px;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding: 15px 5px;
+        }
+        .slider-inner-track .card {
+            flex: 0 0 calc(33.333% - 17px);
+            min-width: 300px;
+        }
+        @media (max-width: 991px) {
+            .slider-inner-track .card {
+                flex: 0 0 calc(50% - 13px);
+            }
+        }
+        @media (max-width: 768px) {
+            .slider-inner-track .card {
+                flex: 0 0 100%;
+            }
+        }
+
         .card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; text-align: center; padding-bottom: 20px; cursor: pointer; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(21, 94, 55, 0.1); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(21, 94, 55, 0.12); }
         .card img { width: 100%; height: 220px; object-fit: cover; }
-        .card h3 { margin: 20px 0 10px; color: var(--primary); font-size: 1.3em; }
+        .card h3 { margin: 20px 0 10px; color: var(--primary); font-size: 1.3em; padding: 0 15px; }
         .card p { padding: 0 20px; color: #555; font-size: 0.95em; line-height: 1.6; }
+
+        .slider-nav {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            z-index: 10;
+            position: absolute;
+        }
+        .slider-nav:hover {
+            background: var(--primary-light);
+            transform: scale(1.1);
+        }
+        .prev-slide { left: -20px; }
+        .next-slide { right: -20px; }
+        html[dir="rtl"] .prev-slide { left: auto; right: -20px; }
+        html[dir="rtl"] .next-slide { right: auto; left: -20px; }
 
         .partners-container { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; }
         .partners-container img { height: 70px; transition: all 0.3s ease; opacity: 0.9; }
         .partners-container img:hover { opacity: 1; transform: scale(1.1); }
 
         /* الصورة المدمجة أسفل الموقع */
-        .bottom-banner-section {
-            text-align: center;
-            padding: 30px 5% 10px;
-        }
-        .bottom-banner-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-            max-height: 450px;
-            object-fit: cover;
-        }
+        .bottom-banner-section { text-align: center; padding: 30px 5% 10px; }
+        .bottom-banner-img { max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.08); max-height: 400px; object-fit: cover; }
 
         /* --- الفوتر --- */
         footer { background: var(--white); padding: 50px 5% 20px; margin-top: 20px; border-top: 4px solid var(--primary); }
@@ -224,26 +449,7 @@
         .fab-whatsapp { position: fixed; bottom: 30px; left: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); z-index: 1000; text-decoration: none; transition: 0.3s; }
         html[dir="rtl"] .fab-whatsapp { left: auto; right: 30px; }
 
-        /* --- المودال --- */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; color: var(--text); }
-        .modal-close { position: absolute; top: 10px; right: 10px; font-size: 24px; cursor: pointer; color: var(--primary); background: #eee; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
-        html[dir="rtl"] .modal-close { right: auto; left: 10px; }
-        
-        #blog-modal .modal-content img { width: 100%; border-radius: 10px; margin-bottom: 15px; max-height: 400px; object-fit: cover; }
-        
-        .services-list { list-style: none; padding: 0; margin-top: 20px; }
-        .services-list li { background: var(--bg); padding: 15px 20px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid var(--primary); font-weight: bold; color: var(--dark); display: flex; align-items: center; gap: 15px;}
-        html[dir="rtl"] .services-list li { border-left: none; border-right: 4px solid var(--primary); }
-        .services-list li i { color: var(--success); }
-
-        #toast { visibility: hidden; min-width: 250px; background-color: var(--success); color: #fff; text-align: center; border-radius: 10px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
-        #toast.error { background-color: var(--danger); }
-        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
-        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
-
-        /* --- واجهة الإدارة --- */
+        /* --- واجهة الإدارة (CMS) --- */
         #admin-panel { display: none; height: 100vh; overflow: hidden; background: var(--bg); }
         .admin-login { max-width: 400px; margin: 15vh auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
         .admin-login input { width: 100%; padding: 15px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; text-align: center; }
@@ -252,10 +458,10 @@
         .admin-layout { display: flex; height: 100vh; }
         .admin-nav { width: 250px; background: var(--dark); color: white; display: flex; flex-direction: column; overflow-y: auto;}
         .admin-nav-header { padding: 20px; text-align: center; background: var(--primary); font-size: 1.3em; font-weight: bold; letter-spacing: 1px;}
-        .admin-nav button { background: transparent; border: none; color: #ccc; text-align: right; padding: 15px 20px; font-size: 1.1em; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-family: inherit;}
-        html[dir="ltr"] .admin-nav button { text-align: left; }
-        .admin-nav button:hover, .admin-nav button.active { background: var(--primary); color: white; padding-right: 25px; }
-        html[dir="ltr"] .admin-nav button:hover, html[dir="ltr"] .admin-nav button.active { padding-right: 20px; padding-left: 25px; }
+        .admin-nav button { background: transparent; border: none; color: #ccc; text-align: left; padding: 15px 20px; font-size: 1.1em; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-family: inherit;}
+        html[dir="rtl"] .admin-nav button { text-align: right; }
+        .admin-nav button:hover, .admin-nav button.active { background: var(--primary); color: white; padding-left: 25px; }
+        html[dir="rtl"] .admin-nav button:hover, html[dir="rtl"] .admin-nav button.active { padding-left: 20px; padding-right: 25px; }
         .admin-nav .logout-btn { margin-top: auto; background: var(--danger); }
 
         .admin-main { flex: 1; padding: 30px; overflow-y: auto; }
@@ -284,22 +490,22 @@
         .btn-save:disabled { background: #999; cursor: not-allowed; }
 
         .archive-section { margin-top: 40px; }
-        .archive-title { font-size: 1.2em; color: var(--dark); margin-bottom: 15px; border-right: 4px solid var(--primary); padding-right: 10px; }
-        html[dir="ltr"] .archive-title { border-right: none; border-left: 4px solid var(--primary); padding-right: 0; padding-left: 10px; }
+        .archive-title { font-size: 1.2em; color: var(--dark); margin-bottom: 15px; border-left: 4px solid var(--primary); padding-left: 10px; }
+        html[dir="rtl"] .archive-title { border-left: none; border-right: 4px solid var(--primary); padding-left: 0; padding-right: 10px; }
         
         .list-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #eee; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
-        .list-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 8px; margin-left: 15px; border: 1px solid #ddd; }
-        html[dir="ltr"] .list-item img { margin-left: 0; margin-right: 15px; }
+        .list-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 8px; margin-right: 15px; border: 1px solid #ddd; }
+        html[dir="rtl"] .list-item img { margin-right: 0; margin-left: 15px; }
         .list-item-info { flex: 1; display: flex; align-items: center; font-weight: bold; color: #444; }
-        .list-actions button { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px; color: white; transition: 0.2s;}
-        html[dir="ltr"] .list-actions button { margin-right: 0; margin-left: 5px; }
+        .list-actions button { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin-left: 5px; color: white; transition: 0.2s;}
+        html[dir="rtl"] .list-actions button { margin-left: 0; margin-right: 5px; }
         .btn-edit { background: #f39c12; } .btn-edit:hover { background: #e67e22; }
         .btn-delete { background: var(--danger); } .btn-delete:hover { background: #c0392b; }
 
         /* ستايل لجدول طلبات الانضمام في لوحة التحكم */
         .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 8px; overflow: hidden; }
-        .admin-table th, .admin-table td { padding: 12px 15px; text-align: right; border-bottom: 1px solid #eee; }
-        html[dir="ltr"] .admin-table th, html[dir="ltr"] .admin-table td { text-align: left; }
+        .admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+        html[dir="rtl"] .admin-table th, html[dir="rtl"] .admin-table td { text-align: right; }
         .admin-table th { background-color: var(--primary); color: white; }
         .admin-table tr:hover { background-color: #f9fbf9; }
     </style>
@@ -322,7 +528,7 @@
                 <a href="#"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrVX1G4xzdkB-NE4L2PpO4spePos34o7PK6j83xhIxpb5UJYNW45wm9NSyIct_UIJysfydE9UXSkS2lC37qCVYYLyq3uRe8h190TC8tAv8LiTP2BHOVaxDgVJON9DeT9FDE-jGHwiNZzknr5F1CDbUsOgJrPD2EcOQVTRY_1Ko3bGQy5zAMbnhmamZKEk/s883/1000023962.jpg" alt="Aitchikh Consulting"></a>
             </div>
             <div class="nav-controls">
-                <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle">Français</button>
+                <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle">عربي</button>
                 <i class="fas fa-bars menu-btn" onclick="toggleSidebar()"></i>
             </div>
         </header>
@@ -330,68 +536,48 @@
         <div id="sidebar">
             <div class="close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></div>
             <br>
-            <a href="#banner" onclick="toggleSidebar()" data-i18n="menuJoin">انضم إلينا</a>
-            <a href="#services" onclick="toggleSidebar()" data-i18n="menuServices">خدماتنا</a>
-            <a href="#works" onclick="toggleSidebar()" data-i18n="menuWorks">أعمالنا</a>
-            <a href="#partners" onclick="toggleSidebar()" data-i18n="menuPartners">شركاؤنا</a>
-            <a href="#footer" onclick="toggleSidebar()" data-i18n="menuContact">اتصل بنا</a>
+            <a href="#banner" onclick="toggleSidebar()" data-i18n="menuJoin">Rejoignez-nous</a>
+            <a href="#services" onclick="toggleSidebar()" data-i18n="menuServices">Nos Services</a>
+            <a href="#works" onclick="toggleSidebar()" data-i18n="menuWorks">Nos Réalisations</a>
+            <a href="#partners" onclick="toggleSidebar()" data-i18n="menuPartners">Nos Partenaires</a>
+            <a href="#footer" onclick="toggleSidebar()" data-i18n="menuContact">Contact</a>
         </div>
 
-        <!-- البانر القصير المطور يحتوي على استمارة انضم إلينا -->
-        <div class="hero-section" id="banner">
-            <div class="hero-content">
-                <h1 id="b-title" data-i18n="heroTitle">Aitchikh Consulting</h1>
-                <p id="b-desc" data-i18n="heroSubtitle">مستشاركم الموثوق لمرافقة المشاريع، تطوير المؤسسات الناشئة، وتوفير الحلول الاستشارية المتميزة والتمويل لضمان نجاح أعمالكم.</p>
-            </div>
-            <div class="registration-card">
-                <h3 data-i18n="joinUsTitle">انضم إلينا</h3>
-                <form id="join-form" onsubmit="handleJoinSubmit(event)">
-                    <div class="form-group-hero">
-                        <input type="text" id="reg-name" required placeholder="الاسم الكامل / Nom complet">
-                    </div>
-                    <div class="form-group-hero">
-                        <input type="tel" id="reg-phone" required placeholder="رقم الهاتف / Téléphone">
-                    </div>
-                    <div class="form-group-hero">
-                        <input type="email" id="reg-email" required placeholder="البريد الإلكتروني / Email">
-                    </div>
-                    <div class="form-group-hero">
-                        <input type="text" id="reg-job" required placeholder="المهنة / Profession">
-                    </div>
-                    <div class="form-group-hero">
-                        <select id="reg-service" required>
-                            <option value="" disabled selected data-i18n="selectService">اختر الخدمة / Choisir un service</option>
-                            <option value="مرافقة المشاريع">مرافقة المشاريع / Accompagnement</option>
-                            <option value="مؤسسات ناشئة">مؤسسات ناشئة / Startups</option>
-                            <option value="التمويل">التمويل / Financement</option>
-                            <option value="التصدير والاستيراد">التصدير والاستيراد / Export & Import</option>
-                            <option value="دراسات">دراسات / Études</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="hero-submit-btn" id="btn-submit-reg" data-i18n="btnSubmit">إرسال الطلب / Envoyer</button>
-                </form>
+        <!-- البانر الاحترافي وصورة مكتب الدراسات -->
+        <div class="hero-banner" id="banner">
+            <div class="hero-banner-overlay"></div>
+            <div class="hero-banner-content">
+                <h1 data-i18n="heroTitle">Aitchikh Consulting</h1>
+                <p data-i18n="heroSubtitle">Votre partenaire de confiance pour l'accompagnement de vos projets, startups, et financement.</p>
+                <button class="hero-cta-btn" onclick="openRegisterModal()">
+                    <span data-i18n="menuJoin">Rejoignez-nous</span> <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
 
         <!-- قسم الخدمات المتحركة -->
         <div class="services-section" id="services" onclick="openServicesModal()">
-            <h2 class="section-title" data-i18n="titleServices">خدماتنا</h2>
-            <p class="services-hint"><span data-i18n="clickToView">اضغط هنا لرؤية جميع الخدمات</span> <i class="fas fa-hand-pointer"></i></p>
+            <h2 class="section-title" data-i18n="titleServices">Nos Services</h2>
+            <p class="services-hint"><span data-i18n="clickToView">Cliquez pour voir tous les services</span> <i class="fas fa-hand-pointer"></i></p>
             <div class="full-width-marquee">
                 <div class="marquee-track row1" id="mq-row1"></div>
                 <div class="marquee-track row2" id="mq-row2"></div>
             </div>
         </div>
 
-        <!-- قسم الإنجازات والأعمال -->
+        <!-- قسم الإنجازات والأعمال كـ Slider تفاعلي -->
         <section id="works">
-            <h2 class="section-title" data-i18n="titleWorks">أعمالنا</h2>
-            <div class="grid" id="works-grid"></div>
+            <h2 class="section-title" data-i18n="titleWorks">Nos Réalisations</h2>
+            <div class="slider-outer-wrapper">
+                <button class="slider-nav prev-slide" onclick="slideWorks(-1)"><i class="fas fa-chevron-left"></i></button>
+                <div class="slider-inner-track" id="works-grid"></div>
+                <button class="slider-nav next-slide" onclick="slideWorks(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
         </section>
 
         <!-- قسم الشركاء -->
         <section id="partners">
-            <h2 class="section-title" data-i18n="titlePartners">شركاؤنا</h2>
+            <h2 class="section-title" data-i18n="titlePartners">Nos Partenaires</h2>
             <div class="partners-container" id="partners-grid"></div>
         </section>
 
@@ -404,13 +590,14 @@
         <footer id="footer">
             <div class="footer-grid">
                 <div>
-                    <h3 data-i18n="aboutUs" style="color:var(--primary); margin-bottom:15px;">من نحن</h3>
+                    <h3 data-i18n="aboutUs" style="color:var(--primary); margin-bottom:15px;">Qui sommes-nous</h3>
                     <p id="f-about" style="font-size: 0.95em; color:#555; line-height: 1.8;"></p>
                 </div>
                 <div>
-                    <h3 data-i18n="contactUs" style="color:var(--primary); margin-bottom:15px;">تواصل معنا</h3>
-                    <p><i class="fas fa-envelope" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-email"></span></p>
-                    <p><i class="fas fa-phone" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-phone"></span></p>
+                    <h3 data-i18n="contactUs" style="color:var(--primary); margin-bottom:15px;">Contactez-nous</h3>
+                    <p><i class="fas fa-envelope" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-email">consultingaitchikh@gmail.com</span></p>
+                    <p><i class="fas fa-phone" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-phone">+213 559 066 605</span></p>
+                    <p><i class="fas fa-map-marker-alt" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-loc">Cité Nouvelle Lycée, Rouïba, Alger</span></p>
                     <div class="social-links" style="margin-top:15px;">
                         <a href="#" id="f-fb" target="_blank"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" id="f-ig" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -418,16 +605,74 @@
                 </div>
                 <div class="map-container" id="f-map"></div>
             </div>
-            <p class="copy">© 2026 Aitchikh Consulting. <a href="#" id="f-privacy" data-i18n="privacy">سياسة الخصوصية</a></p>
+            <p class="copy">© 2026 Aitchikh Consulting. <a href="#" id="f-privacy" data-i18n="privacy">Politique de confidentialité</a></p>
         </footer>
         <a href="https://wa.me/213559066605" class="fab-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+
+    <!-- استمارة التسجيل التفاعلية الاحترافية (Popup Modal) -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-times modal-close" onclick="closeRegisterModal()"></i>
+            <h2 style="color:var(--primary); text-align:center; margin-bottom:25px; font-weight:bold; font-size:1.5em;" data-i18n="joinUsTitle">Formulaire d'inscription</h2>
+            <form id="join-form" onsubmit="handleJoinSubmit(event)">
+                <div class="modal-form-group">
+                    <input type="text" id="reg-name" required placeholder=" ">
+                    <label data-i18n="lblFullName">Nom complet</label>
+                </div>
+                <div class="modal-form-group">
+                    <input type="tel" id="reg-phone" required placeholder=" ">
+                    <label data-i18n="lblPhoneNo">Numéro de téléphone</label>
+                </div>
+                <div class="modal-form-group">
+                    <input type="email" id="reg-email" required placeholder=" ">
+                    <label data-i18n="lblEmailAddr">Adresse Email</label>
+                </div>
+                <div class="modal-form-group">
+                    <input type="text" id="reg-job" required placeholder=" ">
+                    <label data-i18n="lblJobTitle">Profession / Métier</label>
+                </div>
+                <div class="modal-form-group">
+                    <div class="custom-dropdown" id="reg-service-dropdown">
+                        <div class="dropdown-header" onclick="toggleCustomDropdown(event)">
+                            <span id="selected-service-text" data-i18n="selectService">Choisir un service</span>
+                            <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        </div>
+                        <ul class="dropdown-list" id="dropdown-options">
+                            <li class="dropdown-item" data-value="Accompagnement de projets" onclick="selectDropdownOption(this, event)">
+                                <span class="lang-fr">Accompagnement de projets</span>
+                                <span class="lang-ar">مرافقة المشاريع</span>
+                            </li>
+                            <li class="dropdown-item" data-value="Startups" onclick="selectDropdownOption(this, event)">
+                                <span class="lang-fr">Startups</span>
+                                <span class="lang-ar">مؤسسات ناشئة</span>
+                            </li>
+                            <li class="dropdown-item" data-value="Financement" onclick="selectDropdownOption(this, event)">
+                                <span class="lang-fr">Financement</span>
+                                <span class="lang-ar">التمويل</span>
+                            </li>
+                            <li class="dropdown-item" data-value="Export & Import" onclick="selectDropdownOption(this, event)">
+                                <span class="lang-fr">Export & Import</span>
+                                <span class="lang-ar">التصدير والاستيراد</span>
+                            </li>
+                            <li class="dropdown-item" data-value="Études" onclick="selectDropdownOption(this, event)">
+                                <span class="lang-fr">Études de projets</span>
+                                <span class="lang-ar">دراسات المشاريع</span>
+                            </li>
+                        </ul>
+                        <input type="hidden" id="reg-service-value" required>
+                    </div>
+                </div>
+                <button type="submit" class="hero-submit-btn" id="btn-submit-reg" data-i18n="btnSubmit">Envoyer la demande</button>
+            </form>
+        </div>
     </div>
 
     <!-- مودال عرض جميع الخدمات -->
     <div id="all-services-modal" class="modal">
         <div class="modal-content">
             <i class="fas fa-times modal-close" onclick="closeServicesModal()"></i>
-            <h2 style="color:var(--primary); text-align:center; margin-bottom:20px; border-bottom: 2px solid #eee; padding-bottom:15px;" data-i18n="titleServices">خدماتنا</h2>
+            <h2 style="color:var(--primary); text-align:center; margin-bottom:20px; border-bottom: 2px solid #eee; padding-bottom:15px;" data-i18n="titleServices">Nos Services</h2>
             <ul class="services-list" id="services-full-list"></ul>
         </div>
     </div>
@@ -446,105 +691,103 @@
     <div id="admin-panel">
         <div id="login-section" class="admin-login">
             <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrVX1G4xzdkB-NE4L2PpO4spePos34o7PK6j83xhIxpb5UJYNW45wm9NSyIct_UIJysfydE9UXSkS2lC37qCVYYLyq3uRe8h190TC8tAv8LiTP2BHOVaxDgVJON9DeT9FDE-jGHwiNZzknr5F1CDbUsOgJrPD2EcOQVTRY_1Ko3bGQy5zAMbnhmamZKEk/s320/1000023962.jpg" style="max-height:80px; margin-bottom:20px; border-radius:10px;">
-            <h2 style="color:var(--primary); margin-bottom: 20px;" data-i18n="adminLogin">تسجيل دخول الإدارة</h2>
-            <input type="password" id="admin-pwd" placeholder="كلمة المرور">
-            <button onclick="checkAdmin()" data-i18n="enterBtn">دخول</button>
+            <h2 style="color:var(--primary); margin-bottom: 20px;" data-i18n="adminLogin">Connexion Admin</h2>
+            <input type="password" id="admin-pwd" placeholder="Mot de passe">
+            <button onclick="checkAdmin()" data-i18n="enterBtn">Entrer</button>
         </div>
 
         <div id="dashboard-layout" class="admin-layout" style="display:none;">
             <div class="admin-nav">
                 <div class="admin-nav-header">Aitchikh CMS</div>
-                <button class="nav-btn active" onclick="switchAdminTab('dash')"><i class="fas fa-chart-line"></i> <span data-i18n="navDash">لوحة التحكم</span></button>
-                <button class="nav-btn" onclick="switchAdminTab('regs')"><i class="fas fa-users"></i> <span data-i18n="navRegs">طلبات الانضمام</span></button>
-                <button class="nav-btn" onclick="switchAdminTab('services')"><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">الخدمات</span></button>
-                <button class="nav-btn" onclick="switchAdminTab('works')"><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">الأعمال</span></button>
-                <button class="nav-btn" onclick="switchAdminTab('partners')"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">الشركاء</span></button>
-                <button class="nav-btn" onclick="switchAdminTab('settings')"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">الإعدادات</span></button>
-                <button class="logout-btn" onclick="window.location.reload()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="navLogout">خروج</span></button>
+                <button class="nav-btn active" onclick="switchAdminTab('dash')"><i class="fas fa-chart-line"></i> <span data-i18n="navDash">Dashboard</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('regs')"><i class="fas fa-users"></i> <span data-i18n="navRegs">Inscriptions</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('services')"><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">Services</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('works')"><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">Réalisations</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('partners')"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">Partenaires</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('settings')"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">Paramètres</span></button>
+                <button class="logout-btn" onclick="window.location.reload()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="navLogout">Quitter</span></button>
             </div>
 
             <div class="admin-main">
                 <div id="sec-dash" class="admin-sec active">
-                    <h2 class="sec-header" data-i18n="dashTitle">إحصائيات الموقع</h2>
+                    <h2 class="sec-header" data-i18n="dashTitle">Statistiques du site</h2>
                     <div class="dashboard-stats">
-                        <div class="stat-box c1"><span data-i18n="statToday">زيارات اليوم</span> <span id="stat-day">0</span></div>
-                        <div class="stat-box c2"><span data-i18n="statMonth">زيارات هذا الشهر</span> <span id="stat-month">0</span></div>
-                        <div class="stat-box c3"><span data-i18n="statReg">طلبات الانضمام</span> <span id="stat-reg">0</span></div>
+                        <div class="stat-box c1"><span data-i18n="statToday">Visites (Aujourd'hui)</span> <span id="stat-day">0</span></div>
+                        <div class="stat-box c2"><span data-i18n="statMonth">Visites (Ce Mois)</span> <span id="stat-month">0</span></div>
+                        <div class="stat-box c3"><span data-i18n="statReg">Inscriptions</span> <span id="stat-reg">0</span></div>
                     </div>
                 </div>
 
                 <!-- قسم إدارة طلبات الانضمام المرسلة من المستخدمين -->
                 <div id="sec-regs" class="admin-sec">
-                    <h2 class="sec-header"><span><i class="fas fa-users"></i> <span data-i18n="navRegs">طلبات الانضمام</span></span></h2>
+                    <h2 class="sec-header"><span><i class="fas fa-users"></i> <span data-i18n="navRegs">Inscriptions</span></span></h2>
                     <div class="archive-section">
-                        <h3 class="archive-title" data-i18n="regList">جدول طلبات الانضمام</h3>
+                        <h3 class="archive-title" data-i18n="regList">Liste des inscriptions</h3>
                         <div style="overflow-x: auto; background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
                             <table class="admin-table">
                                 <thead>
                                     <tr>
-                                        <th data-i18n="tblName">الاسم الكامل</th>
-                                        <th data-i18n="tblPhone">رقم الهاتف</th>
-                                        <th data-i18n="tblEmail">البريد الإلكتروني</th>
-                                        <th data-i18n="tblJob">المهنة</th>
-                                        <th data-i18n="tblService">الخدمة المطلوبة</th>
-                                        <th data-i18n="tblDate">تاريخ الطلب</th>
-                                        <th>الإجراءات</th>
+                                        <th data-i18n="tblName">Nom complet</th>
+                                        <th data-i18n="tblPhone">Téléphone</th>
+                                        <th data-i18n="tblEmail">Adresse Email</th>
+                                        <th data-i18n="tblJob">Profession</th>
+                                        <th data-i18n="tblService">Service</th>
+                                        <th data-i18n="tblDate">Date du demande</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody id="list-regs">
-                                    <!-- تعبأ ديناميكياً من قواعد البيانات -->
-                                </tbody>
+                                <tbody id="list-regs"></tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
                 <div id="sec-services" class="admin-sec">
-                    <h2 class="sec-header"><span><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">الخدمات</span></span> <button class="btn-new" onclick="resetForm('service')" data-i18n="btnNew">جديد +</button></h2>
+                    <h2 class="sec-header"><span><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">Services</span></span> <button class="btn-new" onclick="resetForm('service')" data-i18n="btnNew">Nouveau +</button></h2>
                     <div class="form-card">
                         <input type="hidden" id="ad-s-id">
-                        <div class="form-group"><label data-i18n="lblSrvName">اسم الخدمة</label></div>
+                        <div class="form-group"><label data-i18n="lblSrvName">Nom du service</label></div>
                         <div class="form-group"><input type="text" id="ad-s-title-fr" placeholder="Titre (FR)"></div>
                         <div class="form-group"><input type="text" id="ad-s-title-ar" placeholder="Titre (AR)"></div>
-                        <button class="btn-save" id="btn-save-service" onclick="saveService()" data-i18n="btnSave">حفظ</button>
+                        <button class="btn-save" id="btn-save-service" onclick="saveService()" data-i18n="btnSave">Ajouter</button>
                     </div>
-                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-services"></div></div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">Archive</h3><div id="list-services"></div></div>
                 </div>
 
                 <div id="sec-works" class="admin-sec">
-                    <h2 class="sec-header"><span><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">الأعمال</span></span> <button class="btn-new" onclick="resetForm('work')" data-i18n="btnNew">جديد +</button></h2>
+                    <h2 class="sec-header"><span><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">Réalisations</span></span> <button class="btn-new" onclick="resetForm('work')" data-i18n="btnNew">Nouveau +</button></h2>
                     <div class="form-card">
                         <input type="hidden" id="ad-w-id">
-                        <div class="form-group"><label data-i18n="lblImg">الصورة</label><input type="file" id="ad-w-img" accept="image/*"></div>
+                        <div class="form-group"><label data-i18n="lblImg">Image</label><input type="file" id="ad-w-img" accept="image/*"></div>
                         <div class="form-group"><input type="text" id="ad-w-title-fr" placeholder="Titre (FR)"></div>
                         <div class="form-group"><input type="text" id="ad-w-title-ar" placeholder="Titre (AR)"></div>
                         <div class="form-group"><textarea id="ad-w-desc-fr" placeholder="Texte complet (FR)"></textarea></div>
                         <div class="form-group"><textarea id="ad-w-desc-ar" placeholder="Texte complet (AR)"></textarea></div>
-                        <button class="btn-save" id="btn-save-work" onclick="saveWork()" data-i18n="btnSave">حفظ</button>
+                        <button class="btn-save" id="btn-save-work" onclick="saveWork()" data-i18n="btnSave">Ajouter</button>
                     </div>
-                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-works"></div></div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">Archive</h3><div id="list-works"></div></div>
                 </div>
 
                 <div id="sec-partners" class="admin-sec">
-                    <h2 class="sec-header"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">الشركاء</span></h2>
+                    <h2 class="sec-header"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">Partenaires</span></h2>
                     <div class="form-card">
-                        <div class="form-group"><label data-i18n="lblLogo">الشعار</label><input type="file" id="ad-p-img" accept="image/*"></div>
-                        <button class="btn-save" id="btn-save-partner" onclick="addPartner()" data-i18n="btnSave">حفظ</button>
+                        <div class="form-group"><label data-i18n="lblLogo">Logo</label><input type="file" id="ad-p-img" accept="image/*"></div>
+                        <button class="btn-save" id="btn-save-partner" onclick="addPartner()" data-i18n="btnSave">Ajouter</button>
                     </div>
-                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-partners"></div></div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">Archive</h3><div id="list-partners"></div></div>
                 </div>
 
                 <div id="sec-settings" class="admin-sec">
-                    <h2 class="sec-header"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">الإعدادات</span></h2>
+                    <h2 class="sec-header"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">Paramètres</span></h2>
                     <div class="form-card">
-                        <div class="form-group"><label data-i18n="lblContact">بيانات الاتصال</label><input type="text" id="ad-email" placeholder="Email"><input type="text" id="ad-phone" placeholder="Téléphone / Phone" style="margin-top:10px;"></div>
-                        <div class="form-group"><label data-i18n="lblSocial">شبكات التواصل الاجتماعي</label><input type="text" id="ad-fb" placeholder="Facebook (URL)"><input type="text" id="ad-ig" placeholder="Instagram (URL)" style="margin-top:10px;"></div>
+                        <div class="form-group"><label data-i18n="lblContact">Contact</label><input type="text" id="ad-email" placeholder="Email"><input type="text" id="ad-phone" placeholder="Téléphone / Phone" style="margin-top:10px;"></div>
+                        <div class="form-group"><label data-i18n="lblSocial">Réseaux Sociaux</label><input type="text" id="ad-fb" placeholder="Facebook (URL)"><input type="text" id="ad-ig" placeholder="Instagram (URL)" style="margin-top:10px;"></div>
                         <div class="form-group">
-                            <label data-i18n="lblMap">الموقع الجغرافي (كود iframe لخريطة جوجل)</label>
+                            <label data-i18n="lblMap">Localisation (Code Iframe)</label>
                             <textarea id="ad-map" placeholder='<iframe src="https://www.google.com/maps/embed?pb=..."></iframe>'></textarea>
                         </div>
-                        <div class="form-group"><label data-i18n="lblAbout">حول المكتب</label><textarea id="ad-about-fr" placeholder="Texte (FR)"></textarea><textarea id="ad-about-ar" placeholder="Texte (AR)" style="margin-top:10px;"></textarea></div>
-                        <button class="btn-save" id="btn-save-settings" onclick="saveSettings()" data-i18n="btnSave">حفظ الإعدادات</button>
+                        <div class="form-group"><label data-i18n="lblAbout">À propos</label><textarea id="ad-about-fr" placeholder="Texte (FR)"></textarea><textarea id="ad-about-ar" placeholder="Texte (AR)" style="margin-top:10px;"></textarea></div>
+                        <button class="btn-save" id="btn-save-settings" onclick="saveSettings()" data-i18n="btnSave">Enregistrer</button>
                     </div>
                 </div>
 
@@ -571,7 +814,7 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-        let currentLang = 'ar'; // لغة البداية افتراضياً هي العربية لمكتب آيت الشيخ
+        let currentLang = 'fr'; // الفرنسية هي اللغة الافتراضية
 
         // إخفاء شاشة التحميل بعد ثانية واحدة
         setTimeout(() => {
@@ -587,14 +830,16 @@
             fr: { 
                 menuJoin: "Rejoignez-nous", menuServices: "Nos Services", menuWorks: "Nos Réalisations", menuPartners: "Nos Partenaires", menuContact: "Contact", titleServices: "Nos Services", titleWorks: "Nos Réalisations", titlePartners: "Nos Partenaires", aboutUs: "Qui sommes-nous", contactUs: "Contactez-nous", privacy: "Politique de confidentialité", readMore: "Lire la suite", readLess: "Réduire", clickToView: "Cliquez pour voir tous les services", noServices: "Aucun service pour le moment", errorMsg: "Une erreur s'est produite : ", successSave: "Enregistré avec succès", successDel: "Élément supprimé", sureDel: "Êtes-vous sûr de vouloir supprimer ?", chooseImg: "Veuillez choisir une image", enterName: "Veuillez entrer le nom", wrongPwd: "Mot de passe incorrect",
                 adminLogin: "Connexion Admin", enterBtn: "Entrer", navDash: "Tableau de bord", navRegs: "Inscriptions", navServices: "Services", navWorks: "Réalisations", navPartners: "Partenaires", navSettings: "Paramètres", navLogout: "Quitter", dashTitle: "Statistiques du site", statToday: "Visites (Aujourd'hui)", statMonth: "Visites (Ce Mois)", statReg: "Inscriptions", btnNew: "Nouveau +", btnSave: "Enregistrer", archive: "Archive", lblSrvName: "Nom du service", lblImg: "Image", lblLogo: "Logo", lblContact: "Contact", lblSocial: "Réseaux Sociaux", lblMap: "Localisation (Code Iframe de Google Maps)", lblAbout: "À propos", btnUpdate: "Mettre à jour", btnLoading: "En cours...",
-                heroTitle: "Aitchikh Consulting", heroSubtitle: "Votre partenaire de confiance pour l'accompagnement de vos projets, le développement des startups, et le financement de vos activités.", joinUsTitle: "Rejoignez-nous", selectService: "Choisir un service", btnSubmit: "Envoyer la demande",
-                regList: "Liste des inscriptions", tblName: "Nom complet", tblPhone: "Téléphone", tblEmail: "Email", tblJob: "Profession", tblService: "Service", tblDate: "Date du demande"
+                heroTitle: "Aitchikh Consulting", heroSubtitle: "Votre partenaire de confiance pour l'accompagnement de vos projets, startups, et financement.", joinUsTitle: "Formulaire d'inscription", selectService: "Choisir un service", btnSubmit: "Envoyer la demande",
+                regList: "Liste des inscriptions", tblName: "Nom complet", tblPhone: "Téléphone", tblEmail: "Adresse Email", tblJob: "Profession", tblService: "Service", tblDate: "Date du demande",
+                lblFullName: "Nom complet", lblPhoneNo: "Numéro de téléphone", lblEmailAddr: "Adresse Email", lblJobTitle: "Profession / Métier"
             },
             ar: { 
                 menuJoin: "انضم إلينا", menuServices: "خدماتنا", menuWorks: "أعمالنا", menuPartners: "شركاؤنا", menuContact: "اتصل بنا", titleServices: "خدماتنا", titleWorks: "أعمالنا", titlePartners: "شركاؤنا", aboutUs: "من نحن", contactUs: "تواصل معنا", privacy: "سياسة الخصوصية", readMore: "اقرأ المزيد", readLess: "إخفاء النص", clickToView: "اضغط هنا لرؤية جميع الخدمات", noServices: "لا توجد خدمات حالياً", errorMsg: "حدث خطأ: ", successSave: "تم الحفظ بنجاح", successDel: "تم الحذف بنجاح", sureDel: "هل أنت متأكد من الحذف؟", chooseImg: "يرجى اختيار صورة", enterName: "يرجى إدخال الاسم", wrongPwd: "كلمة المرور خاطئة",
                 adminLogin: "تسجيل دخول الإدارة", enterBtn: "دخول", navDash: "لوحة القيادة", navRegs: "طلبات الانضمام", navServices: "الخدمات", navWorks: "الأعمال", navPartners: "الشركاء", navSettings: "الإعدادات", navLogout: "خروج", dashTitle: "إحصائيات الموقع", statToday: "زيارات اليوم", statMonth: "زيارات هذا الشهر", statReg: "طلبات الانضمام", btnNew: "جديد +", btnSave: "حفظ", archive: "الأرشيف", lblSrvName: "اسم الخدمة", lblImg: "الصورة", lblLogo: "الشعار", lblContact: "معلومات الاتصال", lblSocial: "التواصل الاجتماعي", lblMap: "خريطة جوجل (الصق كود Iframe)", lblAbout: "من نحن", btnUpdate: "تحديث", btnLoading: "جاري التحميل...",
-                heroTitle: "مكتب آيت الشيخ للاستشارات", heroSubtitle: "مستشاركم الموثوق لمرافقة المشاريع، تطوير المؤسسات الناشئة، وتوفير الحلول الاستشارية المتميزة والتمويل لضمان نجاح أعمالكم.", joinUsTitle: "انضم إلينا", selectService: "اختر الخدمة", btnSubmit: "إرسال الطلب",
-                regList: "جدول طلبات الانضمام", tblName: "الاسم الكامل", tblPhone: "رقم الهاتف", tblEmail: "البريد الإلكتروني", tblJob: "المهنة", tblService: "الخدمة المطلوبة", tblDate: "تاريخ الطلب"
+                heroTitle: "مكتب آيت الشيخ للاستشارات", heroSubtitle: "مستشاركم الموثوق لمرافقة المشاريع، تطوير المؤسسات الناشئة، وتوفير الحلول الاستشارية المتميزة والتمويل لضمان نجاح أعمالكم.", joinUsTitle: "استمارة التسجيل", selectService: "اختر الخدمة المطلوبة", btnSubmit: "إرسال الطلب",
+                regList: "جدول طلبات الانضمام", tblName: "الاسم الكامل", tblPhone: "رقم الهاتف", tblEmail: "البريد الإلكتروني", tblJob: "المهنة", tblService: "الخدمة المطلوبة", tblDate: "تاريخ الطلب",
+                lblFullName: "الاسم الكامل", lblPhoneNo: "رقم الهاتف", lblEmailAddr: "البريد الإلكتروني", lblJobTitle: "المهنة / التخصص"
             }
         };
 
@@ -603,6 +848,10 @@
             document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             document.documentElement.lang = currentLang;
             document.getElementById('lang-toggle').innerText = currentLang === 'ar' ? 'Français' : 'عربي';
+            
+            // تغيير ترويسة العنوان والخرائط للغة الحالية
+            document.getElementById('f-loc').innerText = currentLang === 'ar' ? 'حي الثانوية الجديدة، رويبة، الجزائر' : 'Cité Nouvelle Lycée, Rouïba, Alger';
+
             document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = translations[currentLang][el.getAttribute('data-i18n')]; });
             
             document.querySelectorAll('.btn-save').forEach(btn => {
@@ -610,12 +859,18 @@
             });
             document.getElementById('admin-pwd').placeholder = currentLang === 'ar' ? 'كلمة المرور' : 'Mot de passe';
             
-            // تحديث نص الحقول في فورم البانر
-            document.getElementById('reg-name').placeholder = currentLang === 'ar' ? 'الاسم الكامل / Nom complet' : 'Nom complet / الاسم الكامل';
-            document.getElementById('reg-phone').placeholder = currentLang === 'ar' ? 'رقم الهاتف / Téléphone' : 'Téléphone / رقم الهاتف';
-            document.getElementById('reg-email').placeholder = currentLang === 'ar' ? 'البريد الإلكتروني / Email' : 'Email / البريد الإلكتروني';
-            document.getElementById('reg-job').placeholder = currentLang === 'ar' ? 'المهنة / Profession' : 'Profession / المهنة';
-            
+            // تحديث نص القائمة المنسدلة المخصصة
+            const serviceHeader = document.getElementById('selected-service-text');
+            const chosenValue = document.getElementById('reg-service-value').value;
+            if (chosenValue) {
+                const matchedEl = document.querySelector(`.dropdown-item[data-value="${chosenValue}"]`);
+                if(matchedEl) {
+                    serviceHeader.innerText = currentLang === 'ar' ? matchedEl.querySelector('.lang-ar').innerText : matchedEl.querySelector('.lang-fr').innerText;
+                }
+            } else {
+                serviceHeader.innerText = currentLang === 'ar' ? "اختر الخدمة المطلوبة" : "Choisir un service";
+            }
+
             renderUI();
         };
 
@@ -659,17 +914,17 @@
             });
         }
 
-        // البيانات المبدئية الافتراضية للخدمات الخمس المطلوبة
+        // البيانات الافتراضية
         let siteData = { 
             banners: [], 
             settings: {
-                email: "contact@aitchikh-consulting.com",
+                email: "consultingaitchikh@gmail.com",
                 phone: "+213 559 066 605",
-                fb: "#",
-                ig: "#",
+                fb: "https://facebook.com/aitchikh.consulting",
+                ig: "https://instagram.com/aitchikh.consulting",
                 about_fr: "Aitchikh Consulting est un cabinet de conseil de premier plan, dédié à l'accompagnement des porteurs de projets, au financement, et au soutien des startups pour atteindre leurs objectifs.",
                 about_ar: "مكتب آيت الشيخ للاستشارات هو شريككم الاستراتيجي لمرافقة المشاريع، دعم وتطوير المؤسسات الناشئة، وتوفير التمويل ودراسات الجدوى المتكاملة لضمان استدامة الأعمال.",
-                map: ""
+                map: '<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3198.5303768228303!2d3.2847669!3d36.7262426!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x128e4fb8dcbb482d%3A0xa9fe08b9ad1b26f5!2sRou%C3%AFba%20Algeria!5e0!3m2!1sen!2sdz!4v1700000000000!5m2!1sen!2sdz" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>'
             }, 
             services: [
                 { id: "s1", title_fr: "Accompagnement de projets", title_ar: "مرافقة المشاريع" },
@@ -678,10 +933,85 @@
                 { id: "s4", title_fr: "Export & Import", title_ar: "التصدير والاستيراد" },
                 { id: "s5", title_fr: "Études", title_ar: "دراسات" }
             ], 
-            works: [], 
+            works: [
+                {
+                    id: "w1",
+                    img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=500&q=80",
+                    title_fr: "Études de Marché Approfondies",
+                    title_ar: "دراسات السوق المتكاملة",
+                    desc_fr: "Élaboration d'études de marché stratégiques pour le lancement de nouveaux projets industriels et commerciaux en Algérie.",
+                    desc_ar: "إعداد دراسات سوق استراتيجية لإطلاق المشاريع الصناعية والتجارية الجديدة في الجزائر بأساليب علمية مدروسة."
+                },
+                {
+                    id: "w2",
+                    img: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=500&q=80",
+                    title_fr: "Accompagnement Labellisation Startup",
+                    title_ar: "مرافقة الحصول على علامة مؤسسة ناشئة",
+                    desc_fr: "Nous avons accompagné plus de 30 porteurs de projets dans l'obtention du label Startup et du financement.",
+                    desc_ar: "قمنا بمرافقة أكثر من 30 حامل مشروع للحصول على علامة مؤسسة ناشئة (Label Startup) والتمويل الاستثماري."
+                },
+                {
+                    id: "w3",
+                    img: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=500&q=80",
+                    title_fr: "Dossiers de Financement Bancaire",
+                    title_ar: "ملفات التمويل والاستثمار",
+                    desc_fr: "Structuration de dossiers de financement solides auprès des banques partenaires et des fonds d'investissement.",
+                    desc_ar: "هيكلة ملفات تمويل قوية وموثوقة لدى البنوك الشريكة وصناديق الاستثمار المختلفة لضمان قبول المشاريع."
+                }
+            ], 
             partners: [],
             registrations: []
         };
+
+        // إدارة فتح وإغلاق النافذة المنبثقة للاستمارة
+        window.openRegisterModal = function() {
+            const modal = document.getElementById('register-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => { modal.classList.add('active'); }, 10);
+        }
+
+        window.closeRegisterModal = function() {
+            const modal = document.getElementById('register-modal');
+            modal.classList.remove('active');
+            setTimeout(() => { modal.style.display = 'none'; }, 400);
+        }
+
+        // إدارة القائمة المنسدلة التفاعلية المخصصة
+        window.toggleCustomDropdown = function(event) {
+            event.stopPropagation();
+            document.getElementById('reg-service-dropdown').classList.toggle('open');
+        }
+
+        window.selectDropdownOption = function(element, event) {
+            event.stopPropagation();
+            const val = element.getAttribute('data-value');
+            const txtFr = element.querySelector('.lang-fr').innerText;
+            const txtAr = element.querySelector('.lang-ar').innerText;
+            
+            document.getElementById('reg-service-value').value = val;
+            document.getElementById('selected-service-text').innerText = currentLang === 'ar' ? txtAr : txtFr;
+            
+            document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            document.getElementById('reg-service-dropdown').classList.remove('open');
+        }
+
+        document.addEventListener('click', function() {
+            const dropdown = document.getElementById('reg-service-dropdown');
+            if(dropdown) dropdown.classList.remove('open');
+        });
+
+        // حركة السلايدر التفاعلي لليمين واليسار (أعمالنا)
+        window.slideWorks = function(direction) {
+            const track = document.getElementById('works-grid');
+            if (!track) return;
+            const cardWidth = track.querySelector('.card')?.offsetWidth || 300;
+            const isRtl = document.documentElement.dir === 'rtl';
+            const multiplier = isRtl ? -direction : direction;
+            const scrollAmount = (cardWidth + 25) * multiplier; // العرض مع المسافة الفاصلة
+            track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
 
         function renderMarqueeAndModal() {
             let srvs = siteData.services || [];
@@ -721,7 +1051,7 @@
             }
         }
 
-        // إرسال استمارة انضم إلينا وحفظها مباشرة في قاعدة البيانات
+        // إرسال استمارة انضم إلينا وحفظها في قاعدة البيانات
         window.handleJoinSubmit = async function(e) {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-reg');
@@ -733,7 +1063,14 @@
             const phone = document.getElementById('reg-phone').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const job = document.getElementById('reg-job').value.trim();
-            const service = document.getElementById('reg-service').value;
+            const service = document.getElementById('reg-service-value').value;
+
+            if(!service) {
+                showToast("selectService", true);
+                btn.disabled = false;
+                btn.innerText = originalText;
+                return;
+            }
 
             try {
                 await addDoc(collection(db, "registrations"), {
@@ -746,11 +1083,13 @@
                     dateString: new Date().toLocaleString(currentLang === 'ar' ? 'ar-DZ' : 'fr-FR')
                 });
 
-                // زيادة العداد الإجمالي للطلبات
                 await setDoc(doc(db, "stats", "registrations"), { count: increment(1) }, { merge: true });
 
                 showToast("successSave");
                 document.getElementById('join-form').reset();
+                document.getElementById('reg-service-value').value = '';
+                document.getElementById('selected-service-text').innerText = currentLang === 'ar' ? "اختر الخدمة المطلوبة" : "Choisir un service";
+                closeRegisterModal();
             } catch (error) {
                 alert(translations[currentLang].errorMsg + error.message);
             } finally {
@@ -762,10 +1101,6 @@
         function renderUI() {
             renderMarqueeAndModal();
 
-            // تحديث نصوص البانر القصير
-            document.getElementById('b-title').innerText = translations[currentLang].heroTitle;
-            document.getElementById('b-desc').innerText = translations[currentLang].heroSubtitle;
-
             const s = siteData.settings || {};
             if(s.email || s.about_fr) {
                 let fullText = currentLang === 'ar' ? (s.about_ar || '') : (s.about_fr || '');
@@ -776,7 +1111,8 @@
                                                 <span id="about-toggle-btn" class="read-more-btn" onclick="toggleAboutText()">${translations[currentLang].readMore}</span>`;
                 } else { aboutContainer.innerText = fullText; }
 
-                document.getElementById('f-email').innerText = s.email || ''; document.getElementById('f-phone').innerText = s.phone || '';
+                document.getElementById('f-email').innerText = s.email || 'consultingaitchikh@gmail.com'; 
+                document.getElementById('f-phone').innerText = s.phone || '+213 559 066 605';
                 document.getElementById('f-fb').href = s.fb || '#'; document.getElementById('f-ig').href = s.ig || '#';
                 
                 if(s.map) {
@@ -786,7 +1122,17 @@
                 } else { document.getElementById('f-map').innerHTML = ''; }
             }
 
-            document.getElementById('works-grid').innerHTML = (siteData.works || []).map((w, i) => `<div class="card" onclick="openBlog(${i})"><img src="${w.img}"><h3>${currentLang === 'ar' ? (w.title_ar||w.title_fr) : (w.title_fr||w.title_ar)}</h3><p>${(currentLang === 'ar' ? (w.desc_ar||'') : (w.desc_fr||'')).substring(0, 60)}...</p><span style="color:var(--primary); font-weight:bold; margin-top:15px; display:inline-block;">${translations[currentLang].readMore}</span></div>`).join('');
+            document.getElementById('works-grid').innerHTML = (siteData.works || []).map((w, i) => `
+                <div class="card" onclick="openBlog(${i})">
+                    <img src="${w.img}">
+                    <h3>${currentLang === 'ar' ? (w.title_ar||w.title_fr) : (w.title_fr||w.title_ar)}</h3>
+                    <p>${(currentLang === 'ar' ? (w.desc_ar||'') : (w.desc_fr||'')).substring(0, 60)}...</p>
+                    <span style="color:var(--primary); font-weight:bold; margin-top:15px; display:inline-block; font-size:0.9em;">
+                        ${translations[currentLang].readMore} <i class="fas fa-arrow-right" style="margin-left: 5px; font-size:0.85em;"></i>
+                    </span>
+                </div>
+            `).join('');
+
             document.getElementById('partners-grid').innerHTML = (siteData.partners || []).map(p => `<img src="${p.img}">`).join('');
             
             if(isAdminRoute && document.getElementById('dashboard-layout').style.display === 'flex') { fillAdminInputs(); }
@@ -797,8 +1143,12 @@
             document.getElementById('m-title').innerText = currentLang === 'ar' ? (w.title_ar||w.title_fr) : (w.title_fr||w.title_ar);
             document.getElementById('m-desc').innerText = currentLang === 'ar' ? (w.desc_ar||w.desc_fr) : (w.desc_fr||w.desc_ar);
             document.getElementById('blog-modal').style.display = 'flex';
+            setTimeout(() => { document.getElementById('blog-modal').classList.add('active'); }, 10);
         }
-        window.closeBlogModal = function() { document.getElementById('blog-modal').style.display = 'none'; }
+        window.closeBlogModal = function() { 
+            document.getElementById('blog-modal').classList.remove('active');
+            setTimeout(() => { document.getElementById('blog-modal').style.display = 'none'; }, 400);
+        }
 
         function initFirebaseListeners() {
             onSnapshot(doc(db, "site", "settings"), (doc) => { if(doc.exists()) siteData.settings = doc.data(); renderUI(); });
@@ -810,7 +1160,7 @@
             onSnapshot(collection(db, "partners"), (snap) => { siteData.partners = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
             onSnapshot(collection(db, "registrations"), (snap) => {
                 siteData.registrations = snap.docs.map(d => ({id: d.id, ...d.data()}));
-                siteData.registrations.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)); // ترتيب تنازلي الأحدث أولاً
+                siteData.registrations.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
                 if(isAdminRoute) renderRegsTable();
             });
         }
@@ -838,7 +1188,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // فحص كلمة السر للإدارة (كلمة السر المبرمجة هي: aitchikh2026)
+        // تسجيل دخول لوحة التحكم (كلمة المرور المشفرة لـ aitchikh2026)
         window.checkAdmin = async function() {
             if(btoa(document.getElementById('admin-pwd').value) === "YWl0Y2hpa2gyMDI2") { 
                 document.getElementById('login-section').style.display = 'none'; 
@@ -868,7 +1218,7 @@
             if(!tbody) return;
             const regs = siteData.registrations || [];
             if(regs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">لا توجد طلبات انضمام حالياً</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">Aucune inscription pour le moment</td></tr>`;
                 return;
             }
             tbody.innerHTML = regs.map(r => `
@@ -968,6 +1318,18 @@
                 catch(error) { alert(translations[currentLang].errorMsg + error.message); }
             }
         }
+
+        // بدء الإعداد المبدئي وتعديل نصوص الصفحة الافتراضية
+        document.addEventListener("DOMContentLoaded", () => {
+            document.documentElement.dir = 'ltr';
+            document.documentElement.lang = 'fr';
+            document.getElementById('lang-toggle').innerText = 'عربي';
+            
+            document.querySelectorAll('[data-i18n]').forEach(el => { 
+                el.innerText = translations[currentLang][el.getAttribute('data-i18n')]; 
+            });
+            renderUI();
+        });
     </script>
 </body>
 </html>
