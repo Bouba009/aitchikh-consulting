@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aitchikh Consulting</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- المتغيرات والتصميم العام بألوان الهوية الخضراء والبيضاء --- */
+        :root { 
+            --primary: #155e37; 
+            --primary-light: #288f54; 
+            --white: #ffffff; 
+            --bg: #f4f8f5; 
+            --text: #2c3e50; 
+            --success: #2ecc71; 
+            --danger: #e74c3c; 
+            --dark: #1b3d2b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', 'Poppins', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        html[dir="ltr"] body { font-family: 'Poppins', 'Cairo', sans-serif; }
+
+        /* --- شاشة التحميل (Preloader) --- */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--white);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .preloader-text {
+            color: var(--primary);
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            animation: pulseText 1s infinite alternate;
+            font-weight: bold;
+        }
+        .preloader-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulseText { 0% { transform: scale(0.95); opacity: 0.8; } 100% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 10px rgba(21, 94, 55, 0.2); } }
+
+        #bg-animation { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; overflow: hidden; }
+        .floating-icon { position: absolute; color: var(--primary); opacity: 0.08; animation: floatUp linear infinite; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); } 100% { transform: translateY(-20vh) rotate(360deg); } }
+
+        header { background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo-container img { max-height: 65px; width: auto; transition: 0.3s; }
+        .nav-controls { display: flex; gap: 15px; align-items: center; }
+        .lang-btn { background: var(--primary); color: var(--white); border: none; padding: 6px 16px; border-radius: 5px; cursor: pointer; font-weight: bold; font-family: inherit; }
+        .menu-btn { font-size: 24px; color: var(--primary); cursor: pointer; }
+
+        #sidebar { position: fixed; top: 0; right: -300px; width: 250px; height: 100vh; background: var(--white); box-shadow: -2px 0 10px rgba(0,0,0,0.1); transition: 0.3s; z-index: 1000; padding: 20px; }
+        html[dir="ltr"] #sidebar { right: auto; left: -300px; box-shadow: 2px 0 10px rgba(0,0,0,0.1); }
+        #sidebar.active { right: 0; }
+        html[dir="ltr"] #sidebar.active { left: 0; right: auto; }
+        .close-btn { text-align: right; font-size: 24px; cursor: pointer; color: var(--primary); }
+        html[dir="ltr"] .close-btn { text-align: left; }
+        #sidebar a { display: block; padding: 15px 0; color: var(--text); text-decoration: none; border-bottom: 1px solid #eee; font-weight: bold;}
+
+        /* --- البانر القصير المطور (استمارة الانضمام المدمجة) --- */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            padding: 35px 40px;
+            margin: 20px 5%;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(21, 94, 55, 0.15);
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 30px;
+            align-items: center;
+        }
+        @media (max-width: 991px) {
+            .hero-section {
+                grid-template-columns: 1fr;
+                padding: 25px 20px;
+                text-align: center;
+            }
+        }
+        .hero-content h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            font-weight: 700;
+        }
+        .hero-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+        .registration-card {
+            background: var(--white);
+            padding: 22px;
+            border-radius: 12px;
+            color: var(--text);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        .registration-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--bg);
+            padding-bottom: 8px;
+        }
+        .form-group-hero {
+            margin-bottom: 12px;
+        }
+        .form-group-hero input, .form-group-hero select {
+            width: 100%;
+            padding: 11px 15px;
+            border: 1px solid #dbe3de;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 0.95em;
+            background: var(--bg);
+            transition: 0.3s;
+            color: var(--text);
+        }
+        .form-group-hero input:focus, .form-group-hero select:focus {
+            border-color: var(--primary);
+            outline: none;
+            background: var(--white);
+            box-shadow: 0 0 5px rgba(21, 94, 55, 0.2);
+        }
+        .hero-submit-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1em;
+            transition: 0.3s;
+            font-family: inherit;
+        }
+        .hero-submit-btn:hover {
+            background: var(--primary-light);
+        }
+
+        /* --- شريط الخدمات المتحرك --- */
+        .services-section { padding: 30px 0; text-align: center; cursor: pointer; transition: 0.3s; }
+        .services-section:hover { background-color: rgba(21, 94, 55, 0.02); }
+        .services-hint { color: var(--primary); font-size: 0.9em; margin-bottom: 10px; opacity: 0.8; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        
+        .full-width-marquee { width: 100vw; position: relative; left: 50%; transform: translateX(-50%); overflow: hidden; padding: 10px 0; background: transparent; }
+        .marquee-track { display: flex; gap: 20px; width: max-content; margin-bottom: 10px; pointer-events: none;}
+        .marquee-item { background: var(--primary); color: var(--white); padding: 12px 25px; border-radius: 30px; font-weight: bold; white-space: nowrap; box-shadow: 0 4px 10px rgba(21, 94, 55, 0.15); font-size: 1em; border: 2px solid rgba(255,255,255,0.15);}
+        
+        @keyframes scrollLTR { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scrollLTR_rev { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        @keyframes scrollRTL { 0% { transform: translateX(0); } 100% { transform: translateX(50%); } }
+        @keyframes scrollRTL_rev { 0% { transform: translateX(50%); } 100% { transform: translateX(0); } }
+
+        html[dir="ltr"] .marquee-track.row1 { animation: scrollLTR 40s linear infinite; }
+        html[dir="ltr"] .marquee-track.row2 { animation: scrollLTR_rev 45s linear infinite; }
+        html[dir="rtl"] .marquee-track.row1 { animation: scrollRTL 40s linear infinite; }
+        html[dir="rtl"] .marquee-track.row2 { animation: scrollRTL_rev 45s linear infinite; }
+
+        /* --- الأقسام الأخرى --- */
+        section { padding: 40px 5%; }
+        .section-title { text-align: center; color: var(--primary); margin-bottom: 40px; font-size: 2em; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 50px; height: 3px; background: var(--primary); border-radius: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        
+        .card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: 0.3s; text-align: center; padding-bottom: 20px; cursor: pointer; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 25px rgba(21, 94, 55, 0.1); }
+        .card img { width: 100%; height: 220px; object-fit: cover; }
+        .card h3 { margin: 20px 0 10px; color: var(--primary); font-size: 1.3em; }
+        .card p { padding: 0 20px; color: #555; font-size: 0.95em; line-height: 1.6; }
+
+        .partners-container { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; }
+        .partners-container img { height: 70px; transition: all 0.3s ease; opacity: 0.9; }
+        .partners-container img:hover { opacity: 1; transform: scale(1.1); }
+
+        /* الصورة المدمجة أسفل الموقع */
+        .bottom-banner-section {
+            text-align: center;
+            padding: 30px 5% 10px;
+        }
+        .bottom-banner-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            max-height: 450px;
+            object-fit: cover;
+        }
+
+        /* --- الفوتر --- */
+        footer { background: var(--white); padding: 50px 5% 20px; margin-top: 20px; border-top: 4px solid var(--primary); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-bottom: 30px; }
+        
+        .map-container iframe { width: 100% !important; height: 200px !important; border: none !important; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        
+        .social-links a { color: var(--white); background: var(--primary); width: 40px; height: 40px; display: inline-flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 20px; margin-right: 10px; text-decoration: none; transition: 0.3s; }
+        html[dir="rtl"] .social-links a { margin-right: 0; margin-left: 10px; }
+        .copy { text-align: center; font-size: 0.9em; color: #888; border-top: 1px solid #eee; padding-top: 20px; }
+        
+        .read-more-btn { color: var(--primary); font-weight: bold; cursor: pointer; display: inline-block; margin-top: 5px; transition: 0.3s; }
+        .read-more-btn:hover { color: var(--primary-light); text-decoration: underline; }
+
+        .fab-whatsapp { position: fixed; bottom: 30px; left: 30px; background: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); z-index: 1000; text-decoration: none; transition: 0.3s; }
+        html[dir="rtl"] .fab-whatsapp { left: auto; right: 30px; }
+
+        /* --- المودال --- */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; color: var(--text); }
+        .modal-close { position: absolute; top: 10px; right: 10px; font-size: 24px; cursor: pointer; color: var(--primary); background: #eee; width: 35px; height: 35px; display: flex; justify-content: center; align-items: center; border-radius: 50%; }
+        html[dir="rtl"] .modal-close { right: auto; left: 10px; }
+        
+        #blog-modal .modal-content img { width: 100%; border-radius: 10px; margin-bottom: 15px; max-height: 400px; object-fit: cover; }
+        
+        .services-list { list-style: none; padding: 0; margin-top: 20px; }
+        .services-list li { background: var(--bg); padding: 15px 20px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid var(--primary); font-weight: bold; color: var(--dark); display: flex; align-items: center; gap: 15px;}
+        html[dir="rtl"] .services-list li { border-left: none; border-right: 4px solid var(--primary); }
+        .services-list li i { color: var(--success); }
+
+        #toast { visibility: hidden; min-width: 250px; background-color: var(--success); color: #fff; text-align: center; border-radius: 10px; padding: 16px; position: fixed; z-index: 3000; left: 50%; bottom: 30px; transform: translateX(-50%); font-size: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        #toast.error { background-color: var(--danger); }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        /* --- واجهة الإدارة --- */
+        #admin-panel { display: none; height: 100vh; overflow: hidden; background: var(--bg); }
+        .admin-login { max-width: 400px; margin: 15vh auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+        .admin-login input { width: 100%; padding: 15px; margin: 20px 0; border: 1px solid #ddd; border-radius: 8px; font-size: 1em; text-align: center; }
+        .admin-login button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1.1em; font-weight: bold; font-family: inherit;}
+        
+        .admin-layout { display: flex; height: 100vh; }
+        .admin-nav { width: 250px; background: var(--dark); color: white; display: flex; flex-direction: column; overflow-y: auto;}
+        .admin-nav-header { padding: 20px; text-align: center; background: var(--primary); font-size: 1.3em; font-weight: bold; letter-spacing: 1px;}
+        .admin-nav button { background: transparent; border: none; color: #ccc; text-align: right; padding: 15px 20px; font-size: 1.1em; cursor: pointer; transition: 0.3s; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 10px; font-family: inherit;}
+        html[dir="ltr"] .admin-nav button { text-align: left; }
+        .admin-nav button:hover, .admin-nav button.active { background: var(--primary); color: white; padding-right: 25px; }
+        html[dir="ltr"] .admin-nav button:hover, html[dir="ltr"] .admin-nav button.active { padding-right: 20px; padding-left: 25px; }
+        .admin-nav .logout-btn { margin-top: auto; background: var(--danger); }
+
+        .admin-main { flex: 1; padding: 30px; overflow-y: auto; }
+        .admin-sec { display: none; animation: fadeIn 0.3s; }
+        .admin-sec.active { display: block; }
+        @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
+
+        .sec-header { margin-bottom: 30px; color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 10px; display: flex; justify-content: space-between; align-items: center;}
+        
+        .dashboard-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+        .stat-box { flex: 1; min-width: 200px; padding: 30px 20px; color: white; border-radius: 15px; text-align: center; font-size: 1.1em; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .stat-box span { display: block; font-size: 3em; margin-top: 10px; }
+        .stat-box.c1 { background: linear-gradient(135deg, #1b3d2b, #288f54); } 
+        .stat-box.c2 { background: linear-gradient(135deg, #11998e, #38ef7d); } 
+        .stat-box.c3 { background: linear-gradient(135deg, #f39c12, #f1c40f); } 
+
+        .form-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: #555; font-weight: bold; font-size: 0.9em; }
+        .form-card input[type="text"], .form-card textarea, .form-card input[type="file"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; transition: 0.3s; }
+        .form-card input[type="text"]:focus, .form-card textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 5px rgba(21,94,55,0.2); }
+        .form-card textarea { min-height: 100px; resize: vertical; }
+        
+        .btn-save { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1em; width: 100%; transition: 0.3s; font-family: inherit;}
+        .btn-save:hover { background: var(--primary-light); }
+        .btn-save:disabled { background: #999; cursor: not-allowed; }
+
+        .archive-section { margin-top: 40px; }
+        .archive-title { font-size: 1.2em; color: var(--dark); margin-bottom: 15px; border-right: 4px solid var(--primary); padding-right: 10px; }
+        html[dir="ltr"] .archive-title { border-right: none; border-left: 4px solid var(--primary); padding-right: 0; padding-left: 10px; }
+        
+        .list-item { display: flex; justify-content: space-between; align-items: center; background: white; border: 1px solid #eee; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
+        .list-item img { width: 80px; height: 60px; object-fit: cover; border-radius: 8px; margin-left: 15px; border: 1px solid #ddd; }
+        html[dir="ltr"] .list-item img { margin-left: 0; margin-right: 15px; }
+        .list-item-info { flex: 1; display: flex; align-items: center; font-weight: bold; color: #444; }
+        .list-actions button { padding: 8px 12px; border: none; border-radius: 5px; cursor: pointer; margin-right: 5px; color: white; transition: 0.2s;}
+        html[dir="ltr"] .list-actions button { margin-right: 0; margin-left: 5px; }
+        .btn-edit { background: #f39c12; } .btn-edit:hover { background: #e67e22; }
+        .btn-delete { background: var(--danger); } .btn-delete:hover { background: #c0392b; }
+
+        /* ستايل لجدول طلبات الانضمام في لوحة التحكم */
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; border-radius: 8px; overflow: hidden; }
+        .admin-table th, .admin-table td { padding: 12px 15px; text-align: right; border-bottom: 1px solid #eee; }
+        html[dir="ltr"] .admin-table th, html[dir="ltr"] .admin-table td { text-align: left; }
+        .admin-table th { background-color: var(--primary); color: white; }
+        .admin-table tr:hover { background-color: #f9fbf9; }
+    </style>
+</head>
+<body>
+
+    <!-- شاشة التحميل -->
+    <div id="preloader">
+        <h1 class="preloader-text">Aitchikh Consulting</h1>
+        <div class="preloader-spinner"></div>
+    </div>
+
+    <div id="bg-animation"></div>
+    <div id="toast"></div>
+
+    <!-- الواجهة العامة للموقع -->
+    <div id="public-view">
+        <header>
+            <div class="logo-container">
+                <a href="#"><img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrVX1G4xzdkB-NE4L2PpO4spePos34o7PK6j83xhIxpb5UJYNW45wm9NSyIct_UIJysfydE9UXSkS2lC37qCVYYLyq3uRe8h190TC8tAv8LiTP2BHOVaxDgVJON9DeT9FDE-jGHwiNZzknr5F1CDbUsOgJrPD2EcOQVTRY_1Ko3bGQy5zAMbnhmamZKEk/s883/1000023962.jpg" alt="Aitchikh Consulting"></a>
+            </div>
+            <div class="nav-controls">
+                <button class="lang-btn" onclick="toggleLanguage()" id="lang-toggle">Français</button>
+                <i class="fas fa-bars menu-btn" onclick="toggleSidebar()"></i>
+            </div>
+        </header>
+
+        <div id="sidebar">
+            <div class="close-btn" onclick="toggleSidebar()"><i class="fas fa-times"></i></div>
+            <br>
+            <a href="#banner" onclick="toggleSidebar()" data-i18n="menuJoin">انضم إلينا</a>
+            <a href="#services" onclick="toggleSidebar()" data-i18n="menuServices">خدماتنا</a>
+            <a href="#works" onclick="toggleSidebar()" data-i18n="menuWorks">أعمالنا</a>
+            <a href="#partners" onclick="toggleSidebar()" data-i18n="menuPartners">شركاؤنا</a>
+            <a href="#footer" onclick="toggleSidebar()" data-i18n="menuContact">اتصل بنا</a>
+        </div>
+
+        <!-- البانر القصير المطور يحتوي على استمارة انضم إلينا -->
+        <div class="hero-section" id="banner">
+            <div class="hero-content">
+                <h1 id="b-title" data-i18n="heroTitle">Aitchikh Consulting</h1>
+                <p id="b-desc" data-i18n="heroSubtitle">مستشاركم الموثوق لمرافقة المشاريع، تطوير المؤسسات الناشئة، وتوفير الحلول الاستشارية المتميزة والتمويل لضمان نجاح أعمالكم.</p>
+            </div>
+            <div class="registration-card">
+                <h3 data-i18n="joinUsTitle">انضم إلينا</h3>
+                <form id="join-form" onsubmit="handleJoinSubmit(event)">
+                    <div class="form-group-hero">
+                        <input type="text" id="reg-name" required placeholder="الاسم الكامل / Nom complet">
+                    </div>
+                    <div class="form-group-hero">
+                        <input type="tel" id="reg-phone" required placeholder="رقم الهاتف / Téléphone">
+                    </div>
+                    <div class="form-group-hero">
+                        <input type="email" id="reg-email" required placeholder="البريد الإلكتروني / Email">
+                    </div>
+                    <div class="form-group-hero">
+                        <input type="text" id="reg-job" required placeholder="المهنة / Profession">
+                    </div>
+                    <div class="form-group-hero">
+                        <select id="reg-service" required>
+                            <option value="" disabled selected data-i18n="selectService">اختر الخدمة / Choisir un service</option>
+                            <option value="مرافقة المشاريع">مرافقة المشاريع / Accompagnement</option>
+                            <option value="مؤسسات ناشئة">مؤسسات ناشئة / Startups</option>
+                            <option value="التمويل">التمويل / Financement</option>
+                            <option value="التصدير والاستيراد">التصدير والاستيراد / Export & Import</option>
+                            <option value="دراسات">دراسات / Études</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="hero-submit-btn" id="btn-submit-reg" data-i18n="btnSubmit">إرسال الطلب / Envoyer</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- قسم الخدمات المتحركة -->
+        <div class="services-section" id="services" onclick="openServicesModal()">
+            <h2 class="section-title" data-i18n="titleServices">خدماتنا</h2>
+            <p class="services-hint"><span data-i18n="clickToView">اضغط هنا لرؤية جميع الخدمات</span> <i class="fas fa-hand-pointer"></i></p>
+            <div class="full-width-marquee">
+                <div class="marquee-track row1" id="mq-row1"></div>
+                <div class="marquee-track row2" id="mq-row2"></div>
+            </div>
+        </div>
+
+        <!-- قسم الإنجازات والأعمال -->
+        <section id="works">
+            <h2 class="section-title" data-i18n="titleWorks">أعمالنا</h2>
+            <div class="grid" id="works-grid"></div>
+        </section>
+
+        <!-- قسم الشركاء -->
+        <section id="partners">
+            <h2 class="section-title" data-i18n="titlePartners">شركاؤنا</h2>
+            <div class="partners-container" id="partners-grid"></div>
+        </section>
+
+        <!-- الصورة المدمجة أسفل الموقع -->
+        <div class="bottom-banner-section">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEhUILeT8UYpuJCPPpKJUM252nBulFInLg9o7AR4ATtEOHPC6HoYv5AUKUVtdarDT1gqdq2qLd5NpNpJtplZPJ4KUYQcnM8IQs5K0PNGcKfaQhcJ3Q4U8S9Fe_mK6g_T935bYSGrkPdBRmRTgaBgKWXn6oDJnJNBXJZg9wavJO3-Kp-aowwhUisWt3wo_20/s2560/1000023963.jpg" class="bottom-banner-img" alt="Aitchikh Consulting Vision">
+        </div>
+
+        <!-- تذييل الصفحة -->
+        <footer id="footer">
+            <div class="footer-grid">
+                <div>
+                    <h3 data-i18n="aboutUs" style="color:var(--primary); margin-bottom:15px;">من نحن</h3>
+                    <p id="f-about" style="font-size: 0.95em; color:#555; line-height: 1.8;"></p>
+                </div>
+                <div>
+                    <h3 data-i18n="contactUs" style="color:var(--primary); margin-bottom:15px;">تواصل معنا</h3>
+                    <p><i class="fas fa-envelope" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-email"></span></p>
+                    <p><i class="fas fa-phone" style="color:var(--primary); margin: 0 5px;"></i> <span id="f-phone"></span></p>
+                    <div class="social-links" style="margin-top:15px;">
+                        <a href="#" id="f-fb" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" id="f-ig" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="map-container" id="f-map"></div>
+            </div>
+            <p class="copy">© 2026 Aitchikh Consulting. <a href="#" id="f-privacy" data-i18n="privacy">سياسة الخصوصية</a></p>
+        </footer>
+        <a href="https://wa.me/213559066605" class="fab-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+    </div>
+
+    <!-- مودال عرض جميع الخدمات -->
+    <div id="all-services-modal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-times modal-close" onclick="closeServicesModal()"></i>
+            <h2 style="color:var(--primary); text-align:center; margin-bottom:20px; border-bottom: 2px solid #eee; padding-bottom:15px;" data-i18n="titleServices">خدماتنا</h2>
+            <ul class="services-list" id="services-full-list"></ul>
+        </div>
+    </div>
+
+    <!-- مودال تفاصيل الأعمال -->
+    <div id="blog-modal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-times modal-close" onclick="closeBlogModal()"></i>
+            <img id="m-img" src="" alt="">
+            <h2 id="m-title" style="color:var(--primary); margin-bottom:15px;"></h2>
+            <p id="m-desc" style="line-height: 1.8; color: #444; white-space: pre-wrap;"></p>
+        </div>
+    </div>
+
+    <!-- واجهة الإدارة (CMS) -->
+    <div id="admin-panel">
+        <div id="login-section" class="admin-login">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjrVX1G4xzdkB-NE4L2PpO4spePos34o7PK6j83xhIxpb5UJYNW45wm9NSyIct_UIJysfydE9UXSkS2lC37qCVYYLyq3uRe8h190TC8tAv8LiTP2BHOVaxDgVJON9DeT9FDE-jGHwiNZzknr5F1CDbUsOgJrPD2EcOQVTRY_1Ko3bGQy5zAMbnhmamZKEk/s320/1000023962.jpg" style="max-height:80px; margin-bottom:20px; border-radius:10px;">
+            <h2 style="color:var(--primary); margin-bottom: 20px;" data-i18n="adminLogin">تسجيل دخول الإدارة</h2>
+            <input type="password" id="admin-pwd" placeholder="كلمة المرور">
+            <button onclick="checkAdmin()" data-i18n="enterBtn">دخول</button>
+        </div>
+
+        <div id="dashboard-layout" class="admin-layout" style="display:none;">
+            <div class="admin-nav">
+                <div class="admin-nav-header">Aitchikh CMS</div>
+                <button class="nav-btn active" onclick="switchAdminTab('dash')"><i class="fas fa-chart-line"></i> <span data-i18n="navDash">لوحة التحكم</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('regs')"><i class="fas fa-users"></i> <span data-i18n="navRegs">طلبات الانضمام</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('services')"><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">الخدمات</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('works')"><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">الأعمال</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('partners')"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">الشركاء</span></button>
+                <button class="nav-btn" onclick="switchAdminTab('settings')"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">الإعدادات</span></button>
+                <button class="logout-btn" onclick="window.location.reload()"><i class="fas fa-sign-out-alt"></i> <span data-i18n="navLogout">خروج</span></button>
+            </div>
+
+            <div class="admin-main">
+                <div id="sec-dash" class="admin-sec active">
+                    <h2 class="sec-header" data-i18n="dashTitle">إحصائيات الموقع</h2>
+                    <div class="dashboard-stats">
+                        <div class="stat-box c1"><span data-i18n="statToday">زيارات اليوم</span> <span id="stat-day">0</span></div>
+                        <div class="stat-box c2"><span data-i18n="statMonth">زيارات هذا الشهر</span> <span id="stat-month">0</span></div>
+                        <div class="stat-box c3"><span data-i18n="statReg">طلبات الانضمام</span> <span id="stat-reg">0</span></div>
+                    </div>
+                </div>
+
+                <!-- قسم إدارة طلبات الانضمام المرسلة من المستخدمين -->
+                <div id="sec-regs" class="admin-sec">
+                    <h2 class="sec-header"><span><i class="fas fa-users"></i> <span data-i18n="navRegs">طلبات الانضمام</span></span></h2>
+                    <div class="archive-section">
+                        <h3 class="archive-title" data-i18n="regList">جدول طلبات الانضمام</h3>
+                        <div style="overflow-x: auto; background: white; border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="tblName">الاسم الكامل</th>
+                                        <th data-i18n="tblPhone">رقم الهاتف</th>
+                                        <th data-i18n="tblEmail">البريد الإلكتروني</th>
+                                        <th data-i18n="tblJob">المهنة</th>
+                                        <th data-i18n="tblService">الخدمة المطلوبة</th>
+                                        <th data-i18n="tblDate">تاريخ الطلب</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="list-regs">
+                                    <!-- تعبأ ديناميكياً من قواعد البيانات -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sec-services" class="admin-sec">
+                    <h2 class="sec-header"><span><i class="fas fa-concierge-bell"></i> <span data-i18n="navServices">الخدمات</span></span> <button class="btn-new" onclick="resetForm('service')" data-i18n="btnNew">جديد +</button></h2>
+                    <div class="form-card">
+                        <input type="hidden" id="ad-s-id">
+                        <div class="form-group"><label data-i18n="lblSrvName">اسم الخدمة</label></div>
+                        <div class="form-group"><input type="text" id="ad-s-title-fr" placeholder="Titre (FR)"></div>
+                        <div class="form-group"><input type="text" id="ad-s-title-ar" placeholder="Titre (AR)"></div>
+                        <button class="btn-save" id="btn-save-service" onclick="saveService()" data-i18n="btnSave">حفظ</button>
+                    </div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-services"></div></div>
+                </div>
+
+                <div id="sec-works" class="admin-sec">
+                    <h2 class="sec-header"><span><i class="fas fa-briefcase"></i> <span data-i18n="navWorks">الأعمال</span></span> <button class="btn-new" onclick="resetForm('work')" data-i18n="btnNew">جديد +</button></h2>
+                    <div class="form-card">
+                        <input type="hidden" id="ad-w-id">
+                        <div class="form-group"><label data-i18n="lblImg">الصورة</label><input type="file" id="ad-w-img" accept="image/*"></div>
+                        <div class="form-group"><input type="text" id="ad-w-title-fr" placeholder="Titre (FR)"></div>
+                        <div class="form-group"><input type="text" id="ad-w-title-ar" placeholder="Titre (AR)"></div>
+                        <div class="form-group"><textarea id="ad-w-desc-fr" placeholder="Texte complet (FR)"></textarea></div>
+                        <div class="form-group"><textarea id="ad-w-desc-ar" placeholder="Texte complet (AR)"></textarea></div>
+                        <button class="btn-save" id="btn-save-work" onclick="saveWork()" data-i18n="btnSave">حفظ</button>
+                    </div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-works"></div></div>
+                </div>
+
+                <div id="sec-partners" class="admin-sec">
+                    <h2 class="sec-header"><i class="fas fa-handshake"></i> <span data-i18n="navPartners">الشركاء</span></h2>
+                    <div class="form-card">
+                        <div class="form-group"><label data-i18n="lblLogo">الشعار</label><input type="file" id="ad-p-img" accept="image/*"></div>
+                        <button class="btn-save" id="btn-save-partner" onclick="addPartner()" data-i18n="btnSave">حفظ</button>
+                    </div>
+                    <div class="archive-section"><h3 class="archive-title" data-i18n="archive">الأرشيف</h3><div id="list-partners"></div></div>
+                </div>
+
+                <div id="sec-settings" class="admin-sec">
+                    <h2 class="sec-header"><i class="fas fa-cogs"></i> <span data-i18n="navSettings">الإعدادات</span></h2>
+                    <div class="form-card">
+                        <div class="form-group"><label data-i18n="lblContact">بيانات الاتصال</label><input type="text" id="ad-email" placeholder="Email"><input type="text" id="ad-phone" placeholder="Téléphone / Phone" style="margin-top:10px;"></div>
+                        <div class="form-group"><label data-i18n="lblSocial">شبكات التواصل الاجتماعي</label><input type="text" id="ad-fb" placeholder="Facebook (URL)"><input type="text" id="ad-ig" placeholder="Instagram (URL)" style="margin-top:10px;"></div>
+                        <div class="form-group">
+                            <label data-i18n="lblMap">الموقع الجغرافي (كود iframe لخريطة جوجل)</label>
+                            <textarea id="ad-map" placeholder='<iframe src="https://www.google.com/maps/embed?pb=..."></iframe>'></textarea>
+                        </div>
+                        <div class="form-group"><label data-i18n="lblAbout">حول المكتب</label><textarea id="ad-about-fr" placeholder="Texte (FR)"></textarea><textarea id="ad-about-ar" placeholder="Texte (AR)" style="margin-top:10px;"></textarea></div>
+                        <button class="btn-save" id="btn-save-settings" onclick="saveSettings()" data-i18n="btnSave">حفظ الإعدادات</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, addDoc, updateDoc, deleteDoc, increment, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1xTHV828178vImPGLFQhr1DS4k9ME28s",
+            authDomain: "bellaskills-8edbb.firebaseapp.com",
+            projectId: "bellaskills-8edbb",
+            storageBucket: "bellaskills-8edbb.firebasestorage.app",
+            messagingSenderId: "730699617338",
+            appId: "1:730699617338:web:2bacbc4078984770e31103",
+            measurementId: "G-E8RP1L6KWJ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        let currentLang = 'ar'; // لغة البداية افتراضياً هي العربية لمكتب آيت الشيخ
+
+        // إخفاء شاشة التحميل بعد ثانية واحدة
+        setTimeout(() => {
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                setTimeout(() => { preloader.style.display = 'none'; }, 400);
+            }
+        }, 1000);
+        
+        const translations = {
+            fr: { 
+                menuJoin: "Rejoignez-nous", menuServices: "Nos Services", menuWorks: "Nos Réalisations", menuPartners: "Nos Partenaires", menuContact: "Contact", titleServices: "Nos Services", titleWorks: "Nos Réalisations", titlePartners: "Nos Partenaires", aboutUs: "Qui sommes-nous", contactUs: "Contactez-nous", privacy: "Politique de confidentialité", readMore: "Lire la suite", readLess: "Réduire", clickToView: "Cliquez pour voir tous les services", noServices: "Aucun service pour le moment", errorMsg: "Une erreur s'est produite : ", successSave: "Enregistré avec succès", successDel: "Élément supprimé", sureDel: "Êtes-vous sûr de vouloir supprimer ?", chooseImg: "Veuillez choisir une image", enterName: "Veuillez entrer le nom", wrongPwd: "Mot de passe incorrect",
+                adminLogin: "Connexion Admin", enterBtn: "Entrer", navDash: "Tableau de bord", navRegs: "Inscriptions", navServices: "Services", navWorks: "Réalisations", navPartners: "Partenaires", navSettings: "Paramètres", navLogout: "Quitter", dashTitle: "Statistiques du site", statToday: "Visites (Aujourd'hui)", statMonth: "Visites (Ce Mois)", statReg: "Inscriptions", btnNew: "Nouveau +", btnSave: "Enregistrer", archive: "Archive", lblSrvName: "Nom du service", lblImg: "Image", lblLogo: "Logo", lblContact: "Contact", lblSocial: "Réseaux Sociaux", lblMap: "Localisation (Code Iframe de Google Maps)", lblAbout: "À propos", btnUpdate: "Mettre à jour", btnLoading: "En cours...",
+                heroTitle: "Aitchikh Consulting", heroSubtitle: "Votre partenaire de confiance pour l'accompagnement de vos projets, le développement des startups, et le financement de vos activités.", joinUsTitle: "Rejoignez-nous", selectService: "Choisir un service", btnSubmit: "Envoyer la demande",
+                regList: "Liste des inscriptions", tblName: "Nom complet", tblPhone: "Téléphone", tblEmail: "Email", tblJob: "Profession", tblService: "Service", tblDate: "Date du demande"
+            },
+            ar: { 
+                menuJoin: "انضم إلينا", menuServices: "خدماتنا", menuWorks: "أعمالنا", menuPartners: "شركاؤنا", menuContact: "اتصل بنا", titleServices: "خدماتنا", titleWorks: "أعمالنا", titlePartners: "شركاؤنا", aboutUs: "من نحن", contactUs: "تواصل معنا", privacy: "سياسة الخصوصية", readMore: "اقرأ المزيد", readLess: "إخفاء النص", clickToView: "اضغط هنا لرؤية جميع الخدمات", noServices: "لا توجد خدمات حالياً", errorMsg: "حدث خطأ: ", successSave: "تم الحفظ بنجاح", successDel: "تم الحذف بنجاح", sureDel: "هل أنت متأكد من الحذف؟", chooseImg: "يرجى اختيار صورة", enterName: "يرجى إدخال الاسم", wrongPwd: "كلمة المرور خاطئة",
+                adminLogin: "تسجيل دخول الإدارة", enterBtn: "دخول", navDash: "لوحة القيادة", navRegs: "طلبات الانضمام", navServices: "الخدمات", navWorks: "الأعمال", navPartners: "الشركاء", navSettings: "الإعدادات", navLogout: "خروج", dashTitle: "إحصائيات الموقع", statToday: "زيارات اليوم", statMonth: "زيارات هذا الشهر", statReg: "طلبات الانضمام", btnNew: "جديد +", btnSave: "حفظ", archive: "الأرشيف", lblSrvName: "اسم الخدمة", lblImg: "الصورة", lblLogo: "الشعار", lblContact: "معلومات الاتصال", lblSocial: "التواصل الاجتماعي", lblMap: "خريطة جوجل (الصق كود Iframe)", lblAbout: "من نحن", btnUpdate: "تحديث", btnLoading: "جاري التحميل...",
+                heroTitle: "مكتب آيت الشيخ للاستشارات", heroSubtitle: "مستشاركم الموثوق لمرافقة المشاريع، تطوير المؤسسات الناشئة، وتوفير الحلول الاستشارية المتميزة والتمويل لضمان نجاح أعمالكم.", joinUsTitle: "انضم إلينا", selectService: "اختر الخدمة", btnSubmit: "إرسال الطلب",
+                regList: "جدول طلبات الانضمام", tblName: "الاسم الكامل", tblPhone: "رقم الهاتف", tblEmail: "البريد الإلكتروني", tblJob: "المهنة", tblService: "الخدمة المطلوبة", tblDate: "تاريخ الطلب"
+            }
+        };
+
+        window.toggleLanguage = function() {
+            currentLang = currentLang === 'fr' ? 'ar' : 'fr';
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.documentElement.lang = currentLang;
+            document.getElementById('lang-toggle').innerText = currentLang === 'ar' ? 'Français' : 'عربي';
+            document.querySelectorAll('[data-i18n]').forEach(el => { el.innerText = translations[currentLang][el.getAttribute('data-i18n')]; });
+            
+            document.querySelectorAll('.btn-save').forEach(btn => {
+                if(!btn.disabled) btn.innerText = translations[currentLang][btn.getAttribute('data-i18n')] || translations[currentLang].btnSave;
+            });
+            document.getElementById('admin-pwd').placeholder = currentLang === 'ar' ? 'كلمة المرور' : 'Mot de passe';
+            
+            // تحديث نص الحقول في فورم البانر
+            document.getElementById('reg-name').placeholder = currentLang === 'ar' ? 'الاسم الكامل / Nom complet' : 'Nom complet / الاسم الكامل';
+            document.getElementById('reg-phone').placeholder = currentLang === 'ar' ? 'رقم الهاتف / Téléphone' : 'Téléphone / رقم الهاتف';
+            document.getElementById('reg-email').placeholder = currentLang === 'ar' ? 'البريد الإلكتروني / Email' : 'Email / البريد الإلكتروني';
+            document.getElementById('reg-job').placeholder = currentLang === 'ar' ? 'المهنة / Profession' : 'Profession / المهنة';
+            
+            renderUI();
+        };
+
+        window.toggleSidebar = function() { document.getElementById('sidebar').classList.toggle('active'); };
+
+        const bgContainer = document.getElementById('bg-animation');
+        const icons = ['fa-chart-line', 'fa-briefcase', 'fa-handshake', 'fa-file-signature', 'fa-calculator', 'fa-file-invoice-dollar'];
+        for(let i=0; i<15; i++) {
+            let el = document.createElement('i'); el.className = `fas ${icons[Math.floor(Math.random() * icons.length)]} floating-icon`;
+            el.style.left = `${Math.random() * 100}vw`; el.style.fontSize = `${Math.random() * 20 + 15}px`; el.style.animationDuration = `${Math.random() * 10 + 15}s`; bgContainer.appendChild(el);
+        }
+
+        function showToast(key, isError = false) {
+            const toast = document.getElementById("toast"); 
+            toast.innerText = translations[currentLang][key] || key; 
+            toast.className = isError ? "show error" : "show";
+            setTimeout(() => { toast.className = toast.className.replace("show", "").replace("error", ""); }, 4000);
+        }
+
+        function compressImageToBase64(file) {
+            return new Promise((resolve) => {
+                if (!file) { resolve(""); return; }
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width; let height = img.height;
+                        const MAX_WIDTH = 800; 
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.6)); 
+                    };
+                    img.onerror = () => { resolve(""); }; 
+                    img.src = event.target.result;
+                };
+                reader.onerror = () => { resolve(""); };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // البيانات المبدئية الافتراضية للخدمات الخمس المطلوبة
+        let siteData = { 
+            banners: [], 
+            settings: {
+                email: "contact@aitchikh-consulting.com",
+                phone: "+213 559 066 605",
+                fb: "#",
+                ig: "#",
+                about_fr: "Aitchikh Consulting est un cabinet de conseil de premier plan, dédié à l'accompagnement des porteurs de projets, au financement, et au soutien des startups pour atteindre leurs objectifs.",
+                about_ar: "مكتب آيت الشيخ للاستشارات هو شريككم الاستراتيجي لمرافقة المشاريع، دعم وتطوير المؤسسات الناشئة، وتوفير التمويل ودراسات الجدوى المتكاملة لضمان استدامة الأعمال.",
+                map: ""
+            }, 
+            services: [
+                { id: "s1", title_fr: "Accompagnement de projets", title_ar: "مرافقة المشاريع" },
+                { id: "s2", title_fr: "Startups", title_ar: "مؤسسات ناشئة" },
+                { id: "s3", title_fr: "Financement", title_ar: "التمويل" },
+                { id: "s4", title_fr: "Export & Import", title_ar: "التصدير والاستيراد" },
+                { id: "s5", title_fr: "Études", title_ar: "دراسات" }
+            ], 
+            works: [], 
+            partners: [],
+            registrations: []
+        };
+
+        function renderMarqueeAndModal() {
+            let srvs = siteData.services || [];
+            const modalList = document.getElementById('services-full-list');
+            
+            if(srvs.length === 0) {
+                modalList.innerHTML = `<li><i class="fas fa-info-circle"></i> ${translations[currentLang].noServices}</li>`;
+                document.getElementById('mq-row1').innerHTML = ''; document.getElementById('mq-row2').innerHTML = '';
+                return;
+            }
+
+            modalList.innerHTML = srvs.map(s => `<li><i class="fas fa-check-circle"></i> ${currentLang === 'ar' ? (s.title_ar||s.title_fr) : (s.title_fr||s.title_ar)}</li>`).join('');
+
+            const half = Math.ceil(srvs.length / 2);
+            const r1 = srvs.slice(0, half);
+            const r2 = srvs.slice(half);
+            const genHtml = (arr) => arr.map(item => `<div class="marquee-item">${currentLang === 'ar' ? (item.title_ar||item.title_fr) : (item.title_fr||item.title_ar)}</div>`).join('');
+            
+            document.getElementById('mq-row1').innerHTML = genHtml(r1) + genHtml(r1) + genHtml(r1);
+            document.getElementById('mq-row2').innerHTML = genHtml(r2) + genHtml(r2) + genHtml(r2);
+        }
+
+        window.openServicesModal = function() { document.getElementById('all-services-modal').style.display = 'flex'; }
+        window.closeServicesModal = function() { document.getElementById('all-services-modal').style.display = 'none'; }
+
+        window.toggleAboutText = function() {
+            const contentSpan = document.getElementById('about-text-content');
+            const btn = document.getElementById('about-toggle-btn');
+            if(contentSpan.getAttribute('data-state') === 'short') {
+                contentSpan.innerText = decodeURIComponent(contentSpan.getAttribute('data-full')) + ' ';
+                contentSpan.setAttribute('data-state', 'full');
+                btn.innerText = translations[currentLang].readLess;
+            } else {
+                contentSpan.innerText = decodeURIComponent(contentSpan.getAttribute('data-short'));
+                contentSpan.setAttribute('data-state', 'short');
+                btn.innerText = translations[currentLang].readMore;
+            }
+        }
+
+        // إرسال استمارة انضم إلينا وحفظها مباشرة في قاعدة البيانات
+        window.handleJoinSubmit = async function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-reg');
+            const originalText = btn.innerText;
+            btn.disabled = true;
+            btn.innerText = translations[currentLang].btnLoading || '...';
+
+            const name = document.getElementById('reg-name').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const job = document.getElementById('reg-job').value.trim();
+            const service = document.getElementById('reg-service').value;
+
+            try {
+                await addDoc(collection(db, "registrations"), {
+                    name: name,
+                    phone: phone,
+                    email: email,
+                    job: job,
+                    service: service,
+                    timestamp: Date.now(),
+                    dateString: new Date().toLocaleString(currentLang === 'ar' ? 'ar-DZ' : 'fr-FR')
+                });
+
+                // زيادة العداد الإجمالي للطلبات
+                await setDoc(doc(db, "stats", "registrations"), { count: increment(1) }, { merge: true });
+
+                showToast("successSave");
+                document.getElementById('join-form').reset();
+            } catch (error) {
+                alert(translations[currentLang].errorMsg + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
+        };
+
+        function renderUI() {
+            renderMarqueeAndModal();
+
+            // تحديث نصوص البانر القصير
+            document.getElementById('b-title').innerText = translations[currentLang].heroTitle;
+            document.getElementById('b-desc').innerText = translations[currentLang].heroSubtitle;
+
+            const s = siteData.settings || {};
+            if(s.email || s.about_fr) {
+                let fullText = currentLang === 'ar' ? (s.about_ar || '') : (s.about_fr || '');
+                const aboutContainer = document.getElementById('f-about');
+                if (fullText.length > 120) {
+                    let shortText = fullText.substring(0, 120) + '... ';
+                    aboutContainer.innerHTML = `<span id="about-text-content" data-full="${encodeURIComponent(fullText)}" data-short="${encodeURIComponent(shortText)}" data-state="short">${shortText}</span>
+                                                <span id="about-toggle-btn" class="read-more-btn" onclick="toggleAboutText()">${translations[currentLang].readMore}</span>`;
+                } else { aboutContainer.innerText = fullText; }
+
+                document.getElementById('f-email').innerText = s.email || ''; document.getElementById('f-phone').innerText = s.phone || '';
+                document.getElementById('f-fb').href = s.fb || '#'; document.getElementById('f-ig').href = s.ig || '#';
+                
+                if(s.map) {
+                    let mapData = s.map.trim();
+                    if(mapData.includes('<iframe')) { document.getElementById('f-map').innerHTML = mapData; } 
+                    else if (mapData.startsWith("http")) { document.getElementById('f-map').innerHTML = `<iframe src="${mapData}" allowfullscreen="" loading="lazy"></iframe>`; }
+                } else { document.getElementById('f-map').innerHTML = ''; }
+            }
+
+            document.getElementById('works-grid').innerHTML = (siteData.works || []).map((w, i) => `<div class="card" onclick="openBlog(${i})"><img src="${w.img}"><h3>${currentLang === 'ar' ? (w.title_ar||w.title_fr) : (w.title_fr||w.title_ar)}</h3><p>${(currentLang === 'ar' ? (w.desc_ar||'') : (w.desc_fr||'')).substring(0, 60)}...</p><span style="color:var(--primary); font-weight:bold; margin-top:15px; display:inline-block;">${translations[currentLang].readMore}</span></div>`).join('');
+            document.getElementById('partners-grid').innerHTML = (siteData.partners || []).map(p => `<img src="${p.img}">`).join('');
+            
+            if(isAdminRoute && document.getElementById('dashboard-layout').style.display === 'flex') { fillAdminInputs(); }
+        }
+
+        window.openBlog = function(i) {
+            const w = siteData.works[i]; document.getElementById('m-img').src = w.img;
+            document.getElementById('m-title').innerText = currentLang === 'ar' ? (w.title_ar||w.title_fr) : (w.title_fr||w.title_ar);
+            document.getElementById('m-desc').innerText = currentLang === 'ar' ? (w.desc_ar||w.desc_fr) : (w.desc_fr||w.desc_ar);
+            document.getElementById('blog-modal').style.display = 'flex';
+        }
+        window.closeBlogModal = function() { document.getElementById('blog-modal').style.display = 'none'; }
+
+        function initFirebaseListeners() {
+            onSnapshot(doc(db, "site", "settings"), (doc) => { if(doc.exists()) siteData.settings = doc.data(); renderUI(); });
+            onSnapshot(collection(db, "services"), (snap) => { 
+                if(!snap.empty) { siteData.services = snap.docs.map(d => ({id: d.id, ...d.data()})); }
+                renderMarqueeAndModal(); 
+            });
+            onSnapshot(collection(db, "works"), (snap) => { siteData.works = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
+            onSnapshot(collection(db, "partners"), (snap) => { siteData.partners = snap.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
+            onSnapshot(collection(db, "registrations"), (snap) => {
+                siteData.registrations = snap.docs.map(d => ({id: d.id, ...d.data()}));
+                siteData.registrations.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0)); // ترتيب تنازلي الأحدث أولاً
+                if(isAdminRoute) renderRegsTable();
+            });
+        }
+
+        const isAdminRoute = window.location.pathname.endsWith('/admin16') || window.location.hash.includes('admin16');
+        initFirebaseListeners(); 
+
+        const todayStr = new Date().toISOString().split('T')[0];
+        const monthStr = todayStr.substring(0,7);
+
+        if(!isAdminRoute) {
+            if(localStorage.getItem('visited_' + todayStr) !== 'true') {
+                localStorage.setItem('visited_' + todayStr, 'true');
+                setDoc(doc(db, "stats", "day_" + todayStr), { count: increment(1) }, { merge: true }).catch(e=>{});
+                setDoc(doc(db, "stats", "month_" + monthStr), { count: increment(1) }, { merge: true }).catch(e=>{});
+            }
+        } else {
+            document.getElementById('public-view').style.display = 'none'; document.getElementById('bg-animation').style.display = 'none'; document.getElementById('admin-panel').style.display = 'block';
+        }
+
+        window.switchAdminTab = function(tabId) {
+            document.querySelectorAll('.admin-sec').forEach(el => el.classList.remove('active'));
+            document.getElementById('sec-' + tabId).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+
+        // فحص كلمة السر للإدارة (كلمة السر المبرمجة هي: aitchikh2026)
+        window.checkAdmin = async function() {
+            if(btoa(document.getElementById('admin-pwd').value) === "YWl0Y2hpa2gyMDI2") { 
+                document.getElementById('login-section').style.display = 'none'; 
+                document.getElementById('dashboard-layout').style.display = 'flex'; 
+                fillAdminInputs();
+                onSnapshot(doc(db, "stats", "day_" + todayStr), (doc) => { document.getElementById('stat-day').innerText = doc.exists() ? doc.data().count : 0; });
+                onSnapshot(doc(db, "stats", "month_" + monthStr), (doc) => { document.getElementById('stat-month').innerText = doc.exists() ? doc.data().count : 0; });
+                onSnapshot(doc(db, "stats", "registrations"), (doc) => { document.getElementById('stat-reg').innerText = doc.exists() ? doc.data().count : 0; });
+                renderRegsTable();
+            } else { showToast("wrongPwd", true); }
+        }
+
+        function fillAdminInputs() {
+            const s = siteData.settings || {};
+            document.getElementById('ad-email').value = s.email || ''; document.getElementById('ad-phone').value = s.phone || '';
+            document.getElementById('ad-fb').value = s.fb || ''; document.getElementById('ad-ig').value = s.ig || '';
+            document.getElementById('ad-map').value = s.map || ''; document.getElementById('ad-about-fr').value = s.about_fr || ''; document.getElementById('ad-about-ar').value = s.about_ar || '';
+            
+            document.getElementById('list-services').innerHTML = (siteData.services||[]).map(s => `<div class="list-item"><div class="list-item-info"><i class="fas fa-check" style="margin: 0 10px; color:var(--primary);"></i> ${s.title_fr}</div><div class="list-actions"><button class="btn-edit" onclick="editItem('service','${s.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteItem('services','${s.id}')"><i class="fas fa-trash"></i></button></div></div>`).join('');
+            document.getElementById('list-works').innerHTML = (siteData.works||[]).map(w => `<div class="list-item"><div class="list-item-info"><img src="${w.img}">${w.title_fr}</div><div class="list-actions"><button class="btn-edit" onclick="editItem('work','${w.id}')"><i class="fas fa-edit"></i></button><button class="btn-delete" onclick="deleteItem('works','${w.id}')"><i class="fas fa-trash"></i></button></div></div>`).join('');
+            document.getElementById('list-partners').innerHTML = (siteData.partners||[]).map(p => `<div class="list-item"><div class="list-item-info"><img src="${p.img}"></div><div class="list-actions"><button class="btn-delete" onclick="deleteItem('partners','${p.id}')"><i class="fas fa-trash"></i></button></div></div>`).join('');
+        }
+
+        // عرض جدول طلبات الانضمام في لوحة الإدارة
+        function renderRegsTable() {
+            const tbody = document.getElementById('list-regs');
+            if(!tbody) return;
+            const regs = siteData.registrations || [];
+            if(regs.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px;">لا توجد طلبات انضمام حالياً</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = regs.map(r => `
+                <tr>
+                    <td>${r.name || ''}</td>
+                    <td><a href="tel:${r.phone || ''}" style="color:var(--primary); font-weight:bold; text-decoration:none;"><i class="fas fa-phone-alt"></i> ${r.phone || ''}</a></td>
+                    <td>${r.email || ''}</td>
+                    <td>${r.job || ''}</td>
+                    <td><span style="background:var(--bg); color:var(--primary); padding:4px 8px; border-radius:5px; font-weight:bold; font-size:0.9em;">${r.service || ''}</span></td>
+                    <td style="font-size:0.85em; color:#777;">${r.dateString || ''}</td>
+                    <td><button class="btn-delete" onclick="deleteItem('registrations','${r.id}')"><i class="fas fa-trash"></i></button></td>
+                </tr>
+            `).join('');
+        }
+
+        function setBtnLoading(id, state) { 
+            const btn = document.getElementById(id);
+            if(!btn) return;
+            btn.disabled = state; 
+            if(state) {
+                btn.innerText = translations[currentLang].btnLoading;
+            } else {
+                btn.innerText = btn.hasAttribute('data-edit-mode') ? translations[currentLang].btnUpdate : translations[currentLang].btnSave;
+            }
+        }
+
+        window.saveService = async function() {
+            setBtnLoading("btn-save-service", true);
+            try {
+                const id = document.getElementById('ad-s-id').value;
+                const data = { title_fr: document.getElementById('ad-s-title-fr').value, title_ar: document.getElementById('ad-s-title-ar').value };
+                if(!data.title_fr && !data.title_ar) { showToast("enterName", true); setBtnLoading("btn-save-service", false); return;}
+                if(id) await updateDoc(doc(db, "services", id), data); else await addDoc(collection(db, "services"), data);
+                showToast("successSave"); resetForm('service'); 
+            } catch (error) { alert(translations[currentLang].errorMsg + error.message); } finally { setBtnLoading("btn-save-service", false); } 
+        }
+
+        window.saveWork = async function() {
+            setBtnLoading("btn-save-work", true);
+            try {
+                const id = document.getElementById('ad-w-id').value;
+                const existing = id ? siteData.works.find(x => x.id === id) : null;
+                let imgUrl = existing ? existing.img : "";
+                const file = document.getElementById('ad-w-img').files[0];
+                
+                if(file) { imgUrl = await compressImageToBase64(file); }
+                if(!imgUrl && !id) { showToast("chooseImg", true); setBtnLoading("btn-save-work", false); return; }
+
+                const data = { img: imgUrl, title_fr: document.getElementById('ad-w-title-fr').value, title_ar: document.getElementById('ad-w-title-ar').value, desc_fr: document.getElementById('ad-w-desc-fr').value, desc_ar: document.getElementById('ad-w-desc-ar').value };
+                if(id) await updateDoc(doc(db, "works", id), data); else await addDoc(collection(db, "works"), data);
+                showToast("successSave"); resetForm('work'); 
+            } catch (error) { alert(translations[currentLang].errorMsg + error.message); } finally { setBtnLoading("btn-save-work", false); } 
+        }
+
+        window.addPartner = async function() {
+            setBtnLoading("btn-save-partner", true);
+            try {
+                const file = document.getElementById('ad-p-img').files[0];
+                if(file) {
+                    const imgUrl = await compressImageToBase64(file);
+                    await addDoc(collection(db, "partners"), { img: imgUrl });
+                    showToast("successSave"); document.getElementById('ad-p-img').value = '';
+                } else { showToast("chooseImg", true); }
+            } catch (error) { alert(translations[currentLang].errorMsg + error.message); } finally { setBtnLoading("btn-save-partner", false); } 
+        }
+
+        window.saveSettings = async function() {
+            setBtnLoading("btn-save-settings", true);
+            try {
+                const data = { email: document.getElementById('ad-email').value, phone: document.getElementById('ad-phone').value, fb: document.getElementById('ad-fb').value, ig: document.getElementById('ad-ig').value, map: document.getElementById('ad-map').value, about_fr: document.getElementById('ad-about-fr').value, about_ar: document.getElementById('ad-about-ar').value };
+                await setDoc(doc(db, "site", "settings"), data); showToast("successSave"); 
+            } catch (error) { alert(translations[currentLang].errorMsg + error.message); } finally { setBtnLoading("btn-save-settings", false); } 
+        }
+
+        window.editItem = function(type, id) {
+            let btnText = translations[currentLang].btnUpdate;
+            if(type === 'service') {
+                const s = siteData.services.find(x => x.id === id); document.getElementById('ad-s-id').value = s.id;
+                document.getElementById('ad-s-title-fr').value = s.title_fr; document.getElementById('ad-s-title-ar').value = s.title_ar;
+                const btn = document.getElementById('btn-save-service'); btn.innerText = btnText; btn.setAttribute('data-edit-mode', 'true'); window.location.hash = "#ad-s-title-fr";
+            } else if (type === 'work') {
+                const w = siteData.works.find(x => x.id === id); document.getElementById('ad-w-id').value = w.id;
+                document.getElementById('ad-w-title-fr').value = w.title_fr; document.getElementById('ad-w-title-ar').value = w.title_ar; document.getElementById('ad-w-desc-fr').value = w.desc_fr; document.getElementById('ad-w-desc-ar').value = w.desc_ar;
+                const btn = document.getElementById('btn-save-work'); btn.innerText = btnText; btn.setAttribute('data-edit-mode', 'true'); window.location.hash = "#ad-w-title-fr";
+            }
+        }
+
+        window.resetForm = function(type) {
+            let btnText = translations[currentLang].btnSave;
+            if(type === 'service') { document.getElementById('ad-s-id').value=''; document.getElementById('ad-s-title-fr').value=''; document.getElementById('ad-s-title-ar').value=''; const btn = document.getElementById('btn-save-service'); btn.innerText=btnText; btn.removeAttribute('data-edit-mode');}
+            if(type === 'work') { document.getElementById('ad-w-id').value=''; document.getElementById('ad-w-img').value=''; document.getElementById('ad-w-title-fr').value=''; document.getElementById('ad-w-title-ar').value=''; document.getElementById('ad-w-desc-fr').value=''; document.getElementById('ad-w-desc-ar').value=''; const btn = document.getElementById('btn-save-work'); btn.innerText=btnText; btn.removeAttribute('data-edit-mode');}
+        }
+
+        window.deleteItem = async function(col, id) {
+            if(confirm(translations[currentLang].sureDel)) {
+                try { await deleteDoc(doc(db, col, id)); showToast("successDel"); } 
+                catch(error) { alert(translations[currentLang].errorMsg + error.message); }
+            }
+        }
+    </script>
+</body>
+</html>
